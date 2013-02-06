@@ -1,0 +1,29 @@
+{
+  "name": "tddforjs",
+  "version": "1.0.0",
+  "description": "A Test Driven Development framework for Javascript.",
+  "preferGlobal": false,
+  "main": "./TDDforJS.js",
+  "author": {
+    "name": "Joseph Spencer",
+    "email": "js.developer.undefined@gmail.com"
+  },
+  "keywords": [
+    "javascript",
+    "unit",
+    "test",
+    "behavior",
+    "development",
+    "framework"
+  ],
+  "analyze": false,
+  "license": "apache 2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jsdevel/TDDforJS.git"
+  },
+  "readmeFilename": "README.md",
+  "engines": {
+    "node": "*"
+  }
+}
