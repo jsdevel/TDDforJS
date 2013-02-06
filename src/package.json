@@ -1,6 +1,6 @@
 {
   "name": "tddforjs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Test Driven Development framework for Javascript.",
   "preferGlobal": false,
   "main": "./TDDforJS.js",
