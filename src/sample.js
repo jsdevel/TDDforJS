@@ -4,6 +4,6 @@ var test = tdd.test;
 
 testCase("wowowowowow", function(){
    test("something crazy", function(){
-      asdf
+
    }/*,true to see the full msg */);
 }/*,false to disable all logs */);

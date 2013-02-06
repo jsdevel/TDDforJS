@@ -4,19 +4,27 @@ module.exports = {
 };
 
 /** @const @type {string} */
-var FAIL = "  FAIL | ";
+var INDENT = "   ";
 /** @const @type {string} */
-var PASS = "  PASS | ";
+var GREEN = "\u001b[32m";
+/** @const @type {string} */
+var RED = "\u001b[31m";
+/** @const @type {string} */
+var RESET = "\u001b[0m";
+/** @const @type {string} */
+var FAIL = INDENT+RED+"FAIL | ";
+/** @const @type {string} */
+var PASS = INDENT+GREEN+"PASS | ";
 /** @const @type {string} */
 var HR = "=================";
 /** @const @type {string} */
 var beforeRunMsg          = HR+'\nTestCase: "@"\n'+HR;
 /** @const @type {string} */
-var afterRunErrorMsg      = 'FAILED    SCRIPT "@"';
+var afterRunErrorMsg      = INDENT+RED+'FAILED    SCRIPT "@"';
 /** @const @type {string} */
-var numberOfSuccessesMsg  = 'PASSES   : @';
+var numberOfSuccessesMsg  = INDENT+GREEN+'PASSES   : @';
 /** @const @type {string} */
-var numberOfFailuresMsg   = 'FAILURES : @';
+var numberOfFailuresMsg   = INDENT+RED+'FAILURES : @';
 /** @type {Array} */
 var tests;
 /** @type {boolean} */
@@ -41,13 +49,16 @@ function testCase(description, fn, showResults){
       fn();
       if(tests.length){
          results = getTestResults(tests);
-         log(numberOfSuccessesMsg.replace("@", results.successes));
-         log(numberOfFailuresMsg.replace("@", results.failures));
+         log(RESET+INDENT+HR);
+         log(numberOfSuccessesMsg.replace("@", results.successes)+RESET);
+         if(results.failures > 0){
+            log(numberOfFailuresMsg.replace("@", results.failures)+RESET);
+         }
       } else {
          log("No tests found.");
       }
    } catch (e) {
-      log(afterRunErrorMsg.replace("@", description));
+      log(afterRunErrorMsg.replace("@", description)+RESET);
       log("For the following reason: "+e);
    }
    tests=void 0;
