@@ -140,3 +140,33 @@ function AppFactory(fsModule, pathModule){
    };
 }
 ``````
+Reporting
+========
+TDD aims to provide support for three types of reports:
+
+* CLI
+* jUnit XML
+* TestNG XML
+
+The two latter types would enable integration with a CI server like Hudson or Jenkins.
+
+Here's what a sample report looks like from the CLI:
+``````
+========================================
+TEST SUITE REPORT
+========================================
+Code Coverage   : 12.5%
+Tests Cases Run : 1
+Tests Run       : 1
+Tests Failed    : 0
+Tests Passed    : 1
+
+TEST CASE RESULTS
+========================================
+Test Case    : AppFactory.js
+Tests Run    : 1
+Tests Failed : 0
+Tests Passed : 1
+PASS     : test_UnitTestReporter_should_be_creatable
+
+``````
