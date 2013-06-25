@@ -1,0 +1,18 @@
+{
+   "reporting":{
+      "mode":"cli",
+      "available":[
+         "cli",
+         "junit",
+         "testng"
+      ]
+   },
+   "src":{
+      "base":"../src"
+   },
+   "test":{
+      "base":"../test",
+      "integrations":"./integrations",
+      "units":"./units"
+   }
+}

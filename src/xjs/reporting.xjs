@@ -1,0 +1,37 @@
+{namespace reporting}
+
+{var spacer '========================================'}
+
+{var g "\\u001b[32m"}
+{var r "\\u001b[31m"}
+{var R "\\u001b[0m"}
+
+{template cli}
+{var results getResults()}
+{@spacer}
+TEST SUITE REPORT
+{@spacer}
+Code Coverage   : {getPercentUnitTested()}%
+Tests Cases Run : {getNumberOfTestCases()}
+Tests Run       : {getNumberOfTestsRun()}
+Tests Failed    : {getNumberOfTestsFailed()}
+Tests Passed    : {getNumberOfTestsPassed()}
+
+TEST CASE RESULTS
+{foreach @results}
+{@spacer}
+Test Case    : {name()}
+Tests Run    : {testsRun}
+Tests Failed : {testsFailed}
+Tests Passed : {testsPassed}
+   {foreach tests}
+      {if . === true}
+PASS     : {name()}
+      {:else}
+FAIL     : {name()}
+         : {name + ' - ' + message}
+      {/if}
+   {/foreach}
+
+{/foreach}
+{/template}
