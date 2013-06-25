@@ -8,6 +8,20 @@
     "name": "Joseph Spencer",
     "email": "js.developer.undefined@gmail.com"
   },
+  "bin":{
+    "tddforjs":"build/TDDforJS.js"
+  },
+  "dependencies":[
+    "config-tools"
+  ],
+  "devDependencies":{
+    "xforjs":"x.x.x"
+  },
+  "scripts":{
+    "build":"$(npm bin)/xforjs;bin/build.js",
+    "run":"npm run-script build;node build/TDDforJS.js",
+    "test":"node build/TDDforJS.js"
+  },
   "keywords": [
     "javascript",
     "unit",

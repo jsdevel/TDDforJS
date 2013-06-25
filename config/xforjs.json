@@ -1,0 +1,10 @@
+{
+   "build":"../build",
+   "src":"../src/xjs",
+   "xforjsOptions":{
+      "removelogs":false,
+      "useexternal":false,
+      "normalizespace":false,
+      "global":false
+   }
+}

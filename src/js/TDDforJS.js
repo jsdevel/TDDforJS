@@ -97,7 +97,7 @@ function runTest(description, fn, verbose){
       if(verbose){
          throw  fail + "\n"+e;
       } else {
-         throw fail; 
+         throw fail;
       }
    }
 }
