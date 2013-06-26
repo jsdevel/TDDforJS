@@ -1,12 +1,14 @@
 /**
  * @param {Object} result
  * @param {AppFactory} appFactory
+ * @param {Object} templates
  */
 function handleConfig(result, appFactory, templates){
    var logger = result.logger;
    var config = result.config;
    var src_dir;
    var test_dir;
+   var js_dir;
    var units_dir;
    var integrations_dir;
    var sources;
@@ -27,14 +29,15 @@ function handleConfig(result, appFactory, templates){
 
    src_dir=getMainDir('src');
    test_dir=getMainDir('test');
-   units_dir=getTestDir(config.test, test_dir, 'units');
-   integrations_dir=getTestDir(config.test, test_dir, 'integrations');
+   js_dir=getSubDir(config.src, src_dir, 'js', 'src');
+   units_dir=getSubDir(config.test, test_dir, 'units', 'test');
+   integrations_dir=getSubDir(config.test, test_dir, 'integrations', 'test');
 
-   fileResolver=appFactory.makeFileResolver(src_dir, units_dir);
+   fileResolver=appFactory.makeFileResolver(js_dir, units_dir);
    evaluator = appFactory.makeTDDforJSEvaluator();
 
-   sources        = getFiles(src_dir,          sourceFilePatterns, 100)
-                     .map(getRelativePathFn(src_dir));
+   sources        = getFiles(js_dir,          sourceFilePatterns, 100)
+                     .map(getRelativePathFn(js_dir));
    units          = getFiles(units_dir,        testFilePatterns,   100)
                      .map(getRelativePathFn(units_dir));
    integrations   = getFiles(integrations_dir, testFilePatterns,   100)
@@ -77,15 +80,15 @@ function handleConfig(result, appFactory, templates){
          return dir;
       }
    }
-   function getTestDir(obj, base_dir, prop){
+   function getSubDir(obj, base_dir, prop, name){
       var dir;
       var default_dir = prop;
       if(obj[prop]){
          dir = path.resolve(base_dir, obj[prop]);
-         logger.debug("\"test."+prop+"\" is: "+dir);
+         logger.debug("\""+name+"."+prop+"\" is: "+dir);
       } else {
          dir = path.resolve(base_dir, default_dir);
-         logger.info("\"test."+prop+"\" wasn't defined in the config.");
+         logger.info("\""+name+"."+prop+"\" wasn't defined in the config.");
          logger.info("Using '"+prop+"' by default.");
       }
       if(!fs.existsSync(dir)){
