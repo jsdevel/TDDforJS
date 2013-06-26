@@ -88,6 +88,7 @@ function UnitTestRunner(
                tests.forEach(function(test){
                   testString+=[
                      "__$$__mappedResults.testsRun++;",
+                     "__$$__store();",
                      "try{",
                      hasBefore?"before();":"",
                      test+"();",
@@ -97,7 +98,8 @@ function UnitTestRunner(
                      "}catch(e){",
                      "__$$__mappedResults.tests['"+test+"']=e;",
                      "__$$__mappedResults.testsFailed++;",
-                     "}"
+                     "}",
+                     "__$$__reset();"
                   ].join('\n');
                });
                testString = [
