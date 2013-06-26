@@ -8,7 +8,8 @@
       ]
    },
    "src":{
-      "base":"../src/js"
+      "base":"../src",
+      "js":"./js"
    },
    "test":{
       "base":"../test",
