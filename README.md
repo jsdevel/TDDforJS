@@ -35,7 +35,8 @@ The following is an example config file:
       ]
    },
    "src":{
-      "base":"../src"
+      "base":"../src",
+      "js":"./js"
    },
    "test":{
       "base":"../test",
@@ -43,11 +44,11 @@ The following is an example config file:
       "units":"./units"
    }
 }
-
 `````
 Convention
 =========
-TDD assumes that each file under `src` will have an accompanying unit test under the `units` directory.
+By default, TDD assumes that each file under `src/js` will have an accompanying
+unit test under the `test/units` directory.
 A default project structure looks like this:
 ``````
 $ProjectRoot/
@@ -55,7 +56,9 @@ $ProjectRoot/
             |
             |____src/
             |       |
-            |       |__MyFile.js
+            |       |____js/
+            |              |
+            |              |__MyFile.js
             |
             |
             |____test/
@@ -81,13 +84,31 @@ Here is a sample test case.  The inspiration comes from jUnit 3.x, so the follow
 var factory;
 function before(){
    factory = new AppFactory();
-   UnitTestReporter = function(){};
 }
 function after(){
 }
 
+function test_TDDforJSEvaluator_should_be_creatable(){
+   TDDforJSEvaluator = function(){};
+   if(!(factory.makeTDDforJSEvaluator() instanceof TDDforJSEvaluator)){
+      throw 5
+   }
+}
+function test_FileResolver_should_be_creatable(){
+   FileResolver = function(){};
+   if(!(factory.makeFileResolver() instanceof FileResolver)){
+      throw 5
+   }
+}
 function test_UnitTestReporter_should_be_creatable(){
+   UnitTestReporter = function(){};
    if(!(factory.makeUnitTestReporter() instanceof UnitTestReporter)){
+      throw 5
+   }
+}
+function test_UnitTestRunner_should_be_creatable(){
+   UnitTestRunner = function(){};
+   if(!(factory.makeUnitTestRunner() instanceof UnitTestRunner)){
       throw 5
    }
 }
@@ -157,16 +178,18 @@ TEST SUITE REPORT
 ========================================
 Code Coverage   : 12.5%
 Tests Cases Run : 1
-Tests Run       : 1
+Tests Run       : 4
 Tests Failed    : 0
-Tests Passed    : 1
+Tests Passed    : 4
 
 TEST CASE RESULTS
 ========================================
 Test Case    : AppFactory.js
-Tests Run    : 1
+Tests Run    : 4
 Tests Failed : 0
-Tests Passed : 1
+Tests Passed : 4
+PASS     : test_TDDforJSEvaluator_should_be_creatable
+PASS     : test_FileResolver_should_be_creatable
 PASS     : test_UnitTestReporter_should_be_creatable
-
+PASS     : test_UnitTestRunner_should_be_creatable
 ``````
