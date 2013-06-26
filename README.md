@@ -72,11 +72,11 @@ $ProjectRoot/
 ```````
 TDD is then able to report that you have 100% code coverage, and will run tests in `units/MyFile.js` against `src/MyFile.js`
 
-Sample Test Case
+Sample Test Suite
 ========
 Here is a sample test case.  The inspiration comes from jUnit 3.x, so the following holds true:
-* if a function marked `before` exists within your Test Case, it will be executed before any test
-* if a function marked `after` exists within your Test Case, it will be executed after any test
+* if a function marked `before` exists within your Test Suite, it will be executed before any test
+* if a function marked `after` exists within your Test Suite, it will be executed after any test
 * any function prefixed with `test_` is considered a test.
 * throwing an error of any sort fails a test.
 
@@ -94,9 +94,9 @@ function test_TDDforJSEvaluator_should_be_creatable(){
       throw 5
    }
 }
-function test_FileResolver_should_be_creatable(){
-   FileResolver = function(){};
-   if(!(factory.makeFileResolver() instanceof FileResolver)){
+function test_UnitTestResolver_should_be_creatable(){
+   UnitTestResolver = function(){};
+   if(!(factory.makeUnitTestResolver() instanceof UnitTestResolver)){
       throw 5
    }
 }
@@ -132,8 +132,8 @@ function AppFactory(fsModule, pathModule){
     * @param {string} unitPath
     * @return {TDDforJSEvaluator}
     */
-   this.makeFileResolver=function(sourcePath, unitPath){
-      return new FileResolver(
+   this.makeUnitTestResolver=function(sourcePath, unitPath){
+      return new UnitTestResolver(
          fsModule,
          pathModule,
          sourcePath,
@@ -153,7 +153,7 @@ function AppFactory(fsModule, pathModule){
    /**
     * @param {TDDforJSEvaluator} evaluator
     * @param {UnitTestReporter} reporter
-    * @param {FileResolver} resolver
+    * @param {UnitTestResolver} resolver
     * @returns {UnitTestRunner}
     */
    this.makeUnitTestRunner=function(evaluator, reporter, resolver){
@@ -176,20 +176,20 @@ Here's what a sample report looks like from the CLI:
 ========================================
 TEST SUITE REPORT
 ========================================
-Code Coverage   : 12.5%
-Tests Cases Run : 1
-Tests Run       : 4
-Tests Failed    : 0
-Tests Passed    : 4
+Test  Suite Coverage  :  12.5%
+Tests Suites Run      : 1
+Tests Run             : 4
+Tests Failed          : 0
+Tests Passed          : 4
 
-TEST CASE RESULTS
+TEST SUITE RESULTS
 ========================================
-Test Case    : AppFactory.js
+Test Suite   : AppFactory.js
 Tests Run    : 4
 Tests Failed : 0
 Tests Passed : 4
 PASS     : test_TDDforJSEvaluator_should_be_creatable
-PASS     : test_FileResolver_should_be_creatable
+PASS     : test_UnitTestResolver_should_be_creatable
 PASS     : test_UnitTestReporter_should_be_creatable
 PASS     : test_UnitTestRunner_should_be_creatable
 ``````

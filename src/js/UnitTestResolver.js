@@ -5,7 +5,7 @@
  * @param {string} src base path to source dir
  * @param {string} unit base path to unit test dir
  */
-function FileResolver(
+function UnitTestResolver(
    fsModule,
    pathModule,
    src,

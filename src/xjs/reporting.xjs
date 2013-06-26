@@ -11,16 +11,16 @@
 {@spacer}
 TEST SUITE REPORT
 {@spacer}
-Code Coverage   : {getPercentUnitTested()}%
-Tests Cases Run : {getNumberOfTestCases()}
-Tests Run       : {getNumberOfTestsRun()}
-Tests Failed    : {getNumberOfTestsFailed()}
-Tests Passed    : {getNumberOfTestsPassed()}
+Test Suite Coverage  : {getPercentUnitTested()}%
+Tests Suites Run     : {getNumberOfTestSuites()}
+Tests Run            : {getNumberOfTestsRun()}
+Tests Failed         : {getNumberOfTestsFailed()}
+Tests Passed         : {getNumberOfTestsPassed()}
 
-TEST CASE RESULTS
-{foreach @results}
+TEST SUITE RESULTS
+{foreach @results}\n
 {@spacer}
-Test Case    : {name()}
+Test  Suite  : {name()}
 Tests Run    : {testsRun}
 Tests Failed : {testsFailed}
 Tests Passed : {testsPassed}
@@ -29,7 +29,7 @@ Tests Passed : {testsPassed}
 PASS     : {name()}
       {:else}
 FAIL     : {name()}
-         : {name + ' - ' + message}
+         : {typeof . === 'string' && . || name + ' - ' + message}
       {/if}
    {/foreach}
 

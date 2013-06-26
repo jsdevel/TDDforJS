@@ -34,7 +34,7 @@ function UnitTestReporter(sources, units){
    /**
     * @returns {number}
     */
-   this.getNumberOfTestCases=function(){
+   this.getNumberOfTestSuites=function(){
       fillCoverageMap();
       return unitTestsBackedBySource.length;
    };
