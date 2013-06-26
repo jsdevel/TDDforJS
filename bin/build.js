@@ -24,7 +24,8 @@ var DIRS={
 };
 var fileParts = [
    'AppFactory',
-   'FileResolver',
+   'ImportResolver',
+   'UnitTestResolver',
    'UnitTestReporter',
    'UnitTestRunner',
    'getFiles',

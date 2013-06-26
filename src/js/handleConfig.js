@@ -20,8 +20,10 @@ function handleConfig(result, appFactory, templates){
    var unitReporter;
    /** @type {UnitTestRunner} */
    var unitRunner;
-   /** @type {FileResolver} */
-   var fileResolver;
+   /** @type {UnitTestResolver} */
+   var unitTestResolver;
+   /** @type {ImportResolver} */
+   var importResolver;
    /** @type {TDDforJSEvaluator} */
    var evaluator;
    /** @type {string} */
@@ -33,7 +35,8 @@ function handleConfig(result, appFactory, templates){
    units_dir=getSubDir(config.test, test_dir, 'units', 'test');
    integrations_dir=getSubDir(config.test, test_dir, 'integrations', 'test');
 
-   fileResolver=appFactory.makeFileResolver(js_dir, units_dir);
+   unitTestResolver=appFactory.makeUnitTestResolver(js_dir, units_dir);
+   importResolver=appFactory.makeImportResolver(src_dir, test_dir);
    evaluator = appFactory.makeTDDforJSEvaluator();
 
    sources        = getFiles(js_dir,          sourceFilePatterns, 100)
@@ -47,7 +50,8 @@ function handleConfig(result, appFactory, templates){
    unitRunner = appFactory.makeUnitTestRunner(
       evaluator,
       unitReporter,
-      fileResolver
+      unitTestResolver,
+      importResolver
    );
 
    unitRunner.run();

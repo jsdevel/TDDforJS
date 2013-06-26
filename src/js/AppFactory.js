@@ -5,6 +5,15 @@
  */
 function AppFactory(fsModule, pathModule){
 
+   /**
+    * @param {string} sourceBase
+    * @param {string} testBase
+    * @return {ImportResolver}
+    */
+   this.makeImportResolver=function(sourceBase, testBase){
+      return new ImportResolver(fsModule, pathModule, sourceBase, testBase);
+   };
+
    /** @return {TDDforJSEvaluator} */
    this.makeTDDforJSEvaluator=function(){
       return new TDDforJSEvaluator();
@@ -15,8 +24,8 @@ function AppFactory(fsModule, pathModule){
     * @param {string} unitPath
     * @return {TDDforJSEvaluator}
     */
-   this.makeFileResolver=function(sourcePath, unitPath){
-      return new FileResolver(
+   this.makeUnitTestResolver=function(sourcePath, unitPath){
+      return new UnitTestResolver(
          fsModule,
          pathModule,
          sourcePath,
@@ -36,10 +45,21 @@ function AppFactory(fsModule, pathModule){
    /**
     * @param {TDDforJSEvaluator} evaluator
     * @param {UnitTestReporter} reporter
-    * @param {FileResolver} resolver
+    * @param {UnitTestResolver} unitTestResolver
+    * @param {ImportResolver} importResolver
     * @returns {UnitTestRunner}
     */
-   this.makeUnitTestRunner=function(evaluator, reporter, resolver){
-      return new UnitTestRunner(evaluator, reporter, resolver);
+   this.makeUnitTestRunner=function(
+      evaluator,
+      reporter,
+      unitTestResolver,
+      importResolver
+   ){
+      return new UnitTestRunner(
+         evaluator,
+         reporter,
+         unitTestResolver,
+         importResolver
+      );
    };
 }

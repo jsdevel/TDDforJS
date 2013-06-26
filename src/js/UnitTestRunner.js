@@ -2,16 +2,20 @@
  * @constructor
  * @param {TDDforJSEvaluator} evaluator
  * @param {UnitTestReporter} reporter
- * @param {FileResolver} resolver
+ * @param {UnitTestResolver} unitTestResolver
+ * @param {ImportResolver} importResolver
  */
 function UnitTestRunner(
    evaluator,
    reporter,
-   resolver
+   unitTestResolver,
+   importResolver
 ){
    /** @type {boolean} */
    var hasRun=false;
 
+   /** @type {RegExp} */
+   var reg_imports=/^\/\/import\s+(.+)/gm;
    /** @type {RegExp} */
    var reg_test=/^function\s+(test_[a-zA-Z0-9_$]+)/gm;
    /** @type {RegExp} */
@@ -27,9 +31,11 @@ function UnitTestRunner(
 
       reporter.getSourcesToTest().forEach(function(path){
          /** @type {string} */
-         var src=resolver.getSource(path);
+         var src=unitTestResolver.getSource(path);
          /** @type {string} */
-         var unit=resolver.getUnit(path);
+         var unit=unitTestResolver.getUnit(path);
+         /** @type {Array} */
+         var importMatch;
          /** @type {Array} */
          var testMatch;
          /** @type {Array} */
@@ -74,20 +80,23 @@ function UnitTestRunner(
             while(testMatch=reg_test.exec(unit)){
                tests.push(testMatch[1]);
             }
+            while(importMatch=reg_imports.exec(unit)){
+               testString+=importResolver.resolve(importMatch[1]);
+            }
 
             if(tests.length){
                tests.forEach(function(test){
                   testString+=[
-                     "mappedResults.testsRun++;",
+                     "__$$__mappedResults.testsRun++;",
                      "try{",
                      hasBefore?"before();":"",
                      test+"();",
                      hasAfter?"after();":"",
-                     "mappedResults.tests['"+test+"']=true;",
-                     "mappedResults.testsPassed++;",
+                     "__$$__mappedResults.tests['"+test+"']=true;",
+                     "__$$__mappedResults.testsPassed++;",
                      "}catch(e){",
-                     "mappedResults.tests['"+test+"']=e;",
-                     "mappedResults.testsFailed++;",
+                     "__$$__mappedResults.tests['"+test+"']=e;",
+                     "__$$__mappedResults.testsFailed++;",
                      "}"
                   ].join('\n');
                });
