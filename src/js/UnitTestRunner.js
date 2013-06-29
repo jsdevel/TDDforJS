@@ -31,9 +31,9 @@ function UnitTestRunner(
 
       reporter.getSourcesToTest().forEach(function(path){
          /** @type {string} */
-         var src=unitTestResolver.getSource(path);
+         var src=unitTestResolver.getSource(path.replace(/\./g, '/')+".js");
          /** @type {string} */
-         var unit=unitTestResolver.getUnit(path);
+         var unit=unitTestResolver.getUnit(path.replace(/\./g, '/')+".js");
          /** @type {Array} */
          var importMatch;
          /** @type {Array} */
@@ -63,7 +63,7 @@ function UnitTestRunner(
          if(taintedSrcError=tainted(src)){
             reporter.reportErrorInSource(path, taintedSrcError);
          }
-         if(taintedTestError=tainted(src)){
+         if(taintedTestError=tainted(unit)){
             reporter.reportErrorInSource(path, taintedTestError);
          }
          if(taintedSrcError || taintedTestError){
