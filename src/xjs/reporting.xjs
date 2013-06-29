@@ -7,31 +7,44 @@
 {var R "\\u001b[0m"}
 
 {template cli}
-{var results getResults()}
+   {var results getResults()}
 {@spacer}
 TEST SUITE REPORT
 {@spacer}
-Test Suite Coverage  : {getPercentUnitTested()}%
-Tests Suites Run     : {getNumberOfTestSuites()}
-Tests Run            : {getNumberOfTestsRun()}
-Tests Failed         : {getNumberOfTestsFailed()}
-Tests Passed         : {getNumberOfTestsPassed()}
+Sources Tested: {getPercentUnitTested()}%
+Suites  Run   : {getNumberOfTestSuites()}
+Tests   Run   : {getNumberOfTestsRun()}, Tests Failed: {getNumberOfTestsFailed()}, Tests Passed: {getNumberOfTestsPassed()}
 
 TEST SUITE RESULTS
-{foreach @results}\n
-{@spacer}
-Test  Suite  : {name()}
-Tests Run    : {testsRun}
-Tests Failed : {testsFailed}
-Tests Passed : {testsPassed}
-   {foreach tests}
-      {if . === true}
-PASS     : {name()}
-      {:else}
-FAIL     : {name()}
-         : {typeof . === 'string' && . || name + ' - ' + message}
-      {/if}
-   {/foreach}
 
+{foreach @results}
+Testsuite : {name()}
+Tests run : {testsRun}, Failures : {testsFailed}, Successes : {testsPassed}
+{foreach tests}
+{if . !== true}
+   FAILED : {name()}
+          : {typeof . === 'string' && . || name + ' - ' + message}
+{/if}
+{/foreach}\n
 {/foreach}
+{/template}
+
+{template junit}
+   {param name}
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite errors="0" failures="{testsFailed}" name="{@name}" tests="{testsRun}">
+   {foreach tests}
+   <testcase classname="{@name}" name="{name()}">
+      {if . !== true}
+         {if typeof . === 'string'}
+      <failure type="undefined">{.}</failure>
+         {:else}
+      <failure type="{name}">{message}</failure>
+         {/if}
+      {/if}
+   </testcase>
+   {/foreach}
+   <system-out><![CDATA[]]></system-out>
+   <system-err><![CDATA[]]></system-err>
+</testsuite>
 {/template}

@@ -11,6 +11,7 @@ function handleConfig(result, appFactory, templates){
    var js_dir;
    var units_dir;
    var integrations_dir;
+   var reporting_dir;
    var sources;
    var units;
    var integrations;
@@ -28,12 +29,18 @@ function handleConfig(result, appFactory, templates){
    var evaluator;
    /** @type {string} */
    var report;
+   /** @type {string} */
+   var testSuiteName;
+   /** @type {boolean} */
+   var shouldOutputJunit;
+   /** @type {boolean} */
+   var shouldOutputTestNg;
 
    src_dir=getMainDir('src');
    test_dir=getMainDir('test');
-   js_dir=getSubDir(config.src, src_dir, 'js', 'src');
-   units_dir=getSubDir(config.test, test_dir, 'units', 'test');
-   integrations_dir=getSubDir(config.test, test_dir, 'integrations', 'test');
+   js_dir=getSubDir(config.src, src_dir, 'js', 'src', false);
+   units_dir=getSubDir(config.test, test_dir, 'units', 'test', false);
+   integrations_dir=getSubDir(config.test, test_dir, 'integrations', 'test', true);
 
    unitTestResolver=appFactory.makeUnitTestResolver(js_dir, units_dir);
    importResolver=appFactory.makeImportResolver(src_dir, test_dir);
@@ -56,9 +63,48 @@ function handleConfig(result, appFactory, templates){
 
    unitRunner.run();
 
-   if(config.reporting.mode === 'cli'){
-      report = templates.reporting.cli(unitReporter);
-      console.log(report);
+   if(config.reporting){
+      if(config.reporting.mode === 'cli'){
+         report = templates.reporting.cli(unitReporter);
+         console.log(report);
+      }
+      if(config.reporting.output && config.reporting.base){
+         if(config.reporting.output.types){
+            shouldOutputJunit = config.reporting.output.types.junit;
+            shouldOutputTestNg = config.reporting.output.types.testng;
+         }
+         reporting_dir = path.resolve(result.dir, config.reporting.base);
+         if(
+            (
+               shouldOutputJunit ||
+               shouldOutputTestNg
+            ) &&
+            !fs.existsSync(reporting_dir)){
+            logger.warn(
+               "The following reports directory wasn't found: "+reporting_dir+
+               "\nCreating it now..."
+            );
+            fs.mkdir(reporting_dir);
+         }
+         if(shouldOutputJunit){
+            var results = unitReporter.getResults();
+            for(testSuiteName in results){
+               fs.writeFileSync(
+                    path.resolve(
+                        reporting_dir,
+                        testSuiteName.
+                           replace(/\//g, ".").
+                           replace(/\.js$/, ".xml")
+                     ),
+                     templates.reporting.junit(
+                        results[testSuiteName],
+                        {name:testSuiteName.replace(/\.js$/, "")}
+                     ),
+                     "UTF8"
+               );
+            }
+         }
+      }
    }
 
    function getRelativePathFn(base){
@@ -84,7 +130,7 @@ function handleConfig(result, appFactory, templates){
          return dir;
       }
    }
-   function getSubDir(obj, base_dir, prop, name){
+   function getSubDir(obj, base_dir, prop, name, canIgnore){
       var dir;
       var default_dir = prop;
       if(obj[prop]){
@@ -96,8 +142,16 @@ function handleConfig(result, appFactory, templates){
          logger.info("Using '"+prop+"' by default.");
       }
       if(!fs.existsSync(dir)){
-         logger.error("'"+dir+"' doesn't exist!");
-         process.exit(1);
+         logger.error(
+            "'"+dir+"' doesn't exist!  "+
+            "You should create it, or "+
+            "change the location in the config!"
+         );
+         if(canIgnore){
+            dir = "";
+         } else {
+            process.exit(1);
+         }
       }
       return dir;
    }

@@ -12,6 +12,9 @@ function getFiles(base, patternStrings, maxRecursion, timesCalled, patterns){
    var called = (++timesCalled || 0);
    /** @type {Array}*/
    var filesToReturn = [];
+   if(!base){
+      return filesToReturn;
+   }
    if(called > maxRecursion){
       throw (
          "getFiles - It looks like there's a circular link somewhere in: "+base
