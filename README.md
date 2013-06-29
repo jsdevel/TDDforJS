@@ -176,20 +176,51 @@ Here's what a sample report looks like from the CLI:
 ========================================
 TEST SUITE REPORT
 ========================================
-Test  Suite Coverage  :  12.5%
-Tests Suites Run      : 1
-Tests Run             : 4
-Tests Failed          : 0
-Tests Passed          : 4
+Sources Tested: 30%
+Suites  Run   : 3
+Tests   Run   : 11, Tests Failed: 1, Tests Passed: 10
 
 TEST SUITE RESULTS
-========================================
-Test Suite   : AppFactory.js
-Tests Run    : 4
-Tests Failed : 0
-Tests Passed : 4
-PASS     : test_TDDforJSEvaluator_should_be_creatable
-PASS     : test_UnitTestResolver_should_be_creatable
-PASS     : test_UnitTestReporter_should_be_creatable
-PASS     : test_UnitTestRunner_should_be_creatable
+
+Testsuite : AppFactory.js
+Tests run : 5, Failures : 1, Successes : 4
+   FAILED : test_ImportResolver_should_be_creatable
+          : asdf
+
+Testsuite : ImportResolver.js
+Tests run : 3, Failures : 0, Successes : 3
+
+Testsuite : TDDforJSEvaluator.js
+Tests run : 3, Failures : 0, Successes : 3
+``````
+Here's what a junit report looks like for hudson and jenkins:
+``````
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite errors="0" failures="1" name="AppFactory.js" tests="5">
+   <testcase classname="AppFactory.js"
+name="test_ImportResolver_should_be_creatable">
+
+      <failure type="undefined">asdf</failure>
+
+   </testcase>
+   <testcase classname="AppFactory.js"
+name="test_TDDforJSEvaluator_should_be_creatable">
+
+   </testcase>
+   <testcase classname="AppFactory.js"
+name="test_UnitTestResolver_should_be_creatable">
+
+   </testcase>
+   <testcase classname="AppFactory.js"
+name="test_UnitTestReporter_should_be_creatable">
+
+   </testcase>
+   <testcase classname="AppFactory.js"
+name="test_UnitTestRunner_should_be_creatable">
+
+   </testcase>
+
+   <system-out><![CDATA[]]></system-out>
+   <system-err><![CDATA[]]></system-err>
+</testsuite>
 ``````
