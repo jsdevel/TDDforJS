@@ -34,6 +34,8 @@ function UnitTestRunner(
          var src=unitTestResolver.getSource(path.replace(/\./g, '/')+".js");
          /** @type {string} */
          var unit=unitTestResolver.getUnit(path.replace(/\./g, '/')+".js");
+         /** @type {string} */
+         var imports="";
          /** @type {Array} */
          var importMatch;
          /** @type {Array} */
@@ -81,7 +83,7 @@ function UnitTestRunner(
                tests.push(testMatch[1]);
             }
             while(importMatch=reg_imports.exec(unit)){
-               testString+=importResolver.resolve(importMatch[1]);
+               imports+=importResolver.resolve(importMatch[1]);
             }
 
             if(tests.length){
@@ -105,9 +107,12 @@ function UnitTestRunner(
                testString = [
                   src,
                   ";(function(){",
+                  imports,
+                  ";(function(){",
                   unit,
                   ";(function(){",
                   testString,
+                  "})();",
                   "})();",
                   "})();"
                ].join('\n');

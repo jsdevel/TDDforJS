@@ -10,7 +10,6 @@ function test_ImportResolver_should_be_creatable(){
    if(!(factory.makeImportResolver() instanceof ImportResolver)){
       throw "ImportResolver wasn't created.";
    }
-   throw "asdf";
 }
 function test_TDDforJSEvaluator_should_be_creatable(){
    TDDforJSEvaluator = function(){};
