@@ -11,6 +11,7 @@ function handleConfig(result, appFactory, templates){
    var js_dir;
    var units_dir;
    var integrations_dir;
+   var reporting_dir;
    var sources;
    var units;
    var integrations;
@@ -28,6 +29,12 @@ function handleConfig(result, appFactory, templates){
    var evaluator;
    /** @type {string} */
    var report;
+   /** @type {string} */
+   var testSuiteName;
+   /** @type {boolean} */
+   var shouldOutputJunit;
+   /** @type {boolean} */
+   var shouldOutputTestNg;
 
    src_dir=getMainDir('src');
    test_dir=getMainDir('test');
@@ -56,9 +63,48 @@ function handleConfig(result, appFactory, templates){
 
    unitRunner.run();
 
-   if(config.reporting.mode === 'cli'){
-      report = templates.reporting.cli(unitReporter);
-      console.log(report);
+   if(config.reporting){
+      if(config.reporting.mode === 'cli'){
+         report = templates.reporting.cli(unitReporter);
+         console.log(report);
+      }
+      if(config.reporting.output && config.reporting.base){
+         if(config.reporting.output.types){
+            shouldOutputJunit = config.reporting.output.types.junit;
+            shouldOutputTestNg = config.reporting.output.types.testng;
+         }
+         reporting_dir = path.resolve(result.dir, config.reporting.base);
+         if(
+            (
+               shouldOutputJunit ||
+               shouldOutputTestNg
+            ) &&
+            !fs.existsSync(reporting_dir)){
+            logger.warn(
+               "The following reports directory wasn't found: "+reporting_dir+
+               "\nCreating it now..."
+            );
+            fs.mkdir(reporting_dir);
+         }
+         if(shouldOutputJunit){
+            var results = unitReporter.getResults();
+            for(testSuiteName in results){
+               fs.writeFileSync(
+                    path.resolve(
+                        reporting_dir,
+                        testSuiteName.
+                           replace(/\//g, ".").
+                           replace(/\.js$/, ".xml")
+                     ),
+                     templates.reporting.junit(
+                        results[testSuiteName],
+                        {name:testSuiteName}
+                     ),
+                     "UTF8"
+               );
+            }
+         }
+      }
    }
 
    function getRelativePathFn(base){

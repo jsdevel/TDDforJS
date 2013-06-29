@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite errors="0" failures="0" name="TDDforJSEvaluator.js" tests="3">
+   <testcase classname="TDDforJSEvaluator.js" name="test_mappedResults_should_not_be_accessible">
+      
+   </testcase>
+   <testcase classname="TDDforJSEvaluator.js" name="test_globally_defined_variables_should_be_accessible">
+      
+   </testcase>
+   <testcase classname="TDDforJSEvaluator.js" name="test_previously_defined_global_variables_should_not_be_accessible">
+      
+   </testcase>
+   
+   <system-out><![CDATA[]]></system-out>
+   <system-err><![CDATA[]]></system-err>
+</testsuite>

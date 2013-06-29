@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite errors="0" failures="1" name="AppFactory.js" tests="5">
+   <testcase classname="AppFactory.js" name="test_ImportResolver_should_be_creatable">
+      
+      <failure type="undefined">asdf</failure>
+         
+   </testcase>
+   <testcase classname="AppFactory.js" name="test_TDDforJSEvaluator_should_be_creatable">
+      
+   </testcase>
+   <testcase classname="AppFactory.js" name="test_UnitTestResolver_should_be_creatable">
+      
+   </testcase>
+   <testcase classname="AppFactory.js" name="test_UnitTestReporter_should_be_creatable">
+      
+   </testcase>
+   <testcase classname="AppFactory.js" name="test_UnitTestRunner_should_be_creatable">
+      
+   </testcase>
+   
+   <system-out><![CDATA[]]></system-out>
+   <system-err><![CDATA[]]></system-err>
+</testsuite>

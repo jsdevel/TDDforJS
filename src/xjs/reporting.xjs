@@ -8,7 +8,7 @@
 
 {template cli}
    {var results getResults()}
-   {@spacer}
+{@spacer}
 TEST SUITE REPORT
 {@spacer}
 Sources Tested: {getPercentUnitTested()}%
@@ -17,14 +17,34 @@ Tests   Run   : {getNumberOfTestsRun()}, Tests Failed: {getNumberOfTestsFailed()
 
 TEST SUITE RESULTS
 
-   {foreach @results}
+{foreach @results}
 Testsuite : {name()}
 Tests run : {testsRun}, Failures : {testsFailed}, Successes : {testsPassed}
-      {foreach tests}
-         {if . !== true}
+{foreach tests}
+{if . !== true}
    FAILED : {name()}
           : {typeof . === 'string' && . || name + ' - ' + message}
+{/if}
+{/foreach}\n
+{/foreach}
+{/template}
+
+{template junit}
+   {param name}
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite errors="0" failures="{testsFailed}" name="{@name}" tests="{testsRun}">
+   {foreach tests}
+   <testcase classname="{@name}" name="{name()}">
+      {if . !== true}
+         {if typeof . === 'string'}
+      <failure type="undefined">{.}</failure>
+         {:else}
+      <failure type="{name}">{message}</failure>
          {/if}
-      {/foreach}\n
+      {/if}
+   </testcase>
    {/foreach}
+   <system-out><![CDATA[]]></system-out>
+   <system-err><![CDATA[]]></system-err>
+</testsuite>
 {/template}

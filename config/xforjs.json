@@ -5,6 +5,7 @@
       "removelogs":false,
       "useexternal":false,
       "normalizespace":false,
-      "global":false
+      "global":false,
+      "minifyhtml":false
    }
 }

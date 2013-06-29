@@ -5,7 +5,14 @@
          "cli",
          "junit",
          "testng"
-      ]
+      ],
+      "base":"../reports",
+      "output":{
+         "types":{
+            "junit":true,
+            "testng":false
+         }
+      }
    },
    "src":{
       "base":"../src",
