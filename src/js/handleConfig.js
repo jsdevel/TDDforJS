@@ -31,9 +31,9 @@ function handleConfig(result, appFactory, templates){
 
    src_dir=getMainDir('src');
    test_dir=getMainDir('test');
-   js_dir=getSubDir(config.src, src_dir, 'js', 'src');
-   units_dir=getSubDir(config.test, test_dir, 'units', 'test');
-   integrations_dir=getSubDir(config.test, test_dir, 'integrations', 'test');
+   js_dir=getSubDir(config.src, src_dir, 'js', 'src', false);
+   units_dir=getSubDir(config.test, test_dir, 'units', 'test', false);
+   integrations_dir=getSubDir(config.test, test_dir, 'integrations', 'test', true);
 
    unitTestResolver=appFactory.makeUnitTestResolver(js_dir, units_dir);
    importResolver=appFactory.makeImportResolver(src_dir, test_dir);
@@ -84,7 +84,7 @@ function handleConfig(result, appFactory, templates){
          return dir;
       }
    }
-   function getSubDir(obj, base_dir, prop, name){
+   function getSubDir(obj, base_dir, prop, name, canIgnore){
       var dir;
       var default_dir = prop;
       if(obj[prop]){
@@ -96,8 +96,16 @@ function handleConfig(result, appFactory, templates){
          logger.info("Using '"+prop+"' by default.");
       }
       if(!fs.existsSync(dir)){
-         logger.error("'"+dir+"' doesn't exist!");
-         process.exit(1);
+         logger.error(
+            "'"+dir+"' doesn't exist!  "+
+            "You should create it, or "+
+            "change the location in the config!"
+         );
+         if(canIgnore){
+            dir = "";
+         } else {
+            process.exit(1);
+         }
       }
       return dir;
    }
