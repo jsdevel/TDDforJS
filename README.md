@@ -74,7 +74,7 @@ TDD is then able to report that you have 100% code coverage, and will run tests 
 
 Sample Test Suite
 ========
-Here is a sample test case.  The inspiration comes from jUnit 3.x, so the following holds true:
+Here is a sample test suite.  The inspiration comes from jUnit 3.x, so the following holds true:
 * if a function marked `before` exists within your Test Suite, it will be executed before any test
 * if a function marked `after` exists within your Test Suite, it will be executed after any test
 * any function prefixed with `test_` is considered a test.
