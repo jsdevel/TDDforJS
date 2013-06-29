@@ -98,7 +98,7 @@ function handleConfig(result, appFactory, templates){
                      ),
                      templates.reporting.junit(
                         results[testSuiteName],
-                        {name:testSuiteName}
+                        {name:testSuiteName.replace(/\.js$/, "")}
                      ),
                      "UTF8"
                );
