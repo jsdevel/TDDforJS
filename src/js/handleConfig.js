@@ -92,13 +92,11 @@ function handleConfig(result, appFactory, templates){
                fs.writeFileSync(
                     path.resolve(
                         reporting_dir,
-                        testSuiteName.
-                           replace(/\//g, ".").
-                           replace(/\.js$/, ".xml")
+                        testSuiteName+".xml"
                      ),
                      templates.reporting.junit(
                         results[testSuiteName],
-                        {name:testSuiteName.replace(/\.js$/, "")}
+                        {name:testSuiteName}
                      ),
                      "UTF8"
                );
@@ -109,7 +107,10 @@ function handleConfig(result, appFactory, templates){
 
    function getRelativePathFn(base){
       return function(v){
-         return v.substring(base.length+1);
+         return v.
+            substring(base.length+1).
+            replace(/\.js$/, '').
+            replace(/\//g, '.');
       };
    }
    function getMainDir(ns){
