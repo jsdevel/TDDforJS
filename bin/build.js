@@ -25,6 +25,7 @@ var DIRS={
 var fileParts = [
    'AppFactory',
    'ImportResolver',
+   'RunTimeError',
    'UnitTestResolver',
    'UnitTestReporter',
    'UnitTestRunner',

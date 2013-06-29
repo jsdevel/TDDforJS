@@ -23,7 +23,7 @@ Tests run : {testsRun}, Failures : {testsFailed}, Successes : {testsPassed}
 {foreach tests}
 {if . !== true}
    FAILED : {name()}
-          : {typeof . === 'string' && . || name + ' - ' + message}
+          : {name + ' - ' + message}
 {/if}
 {/foreach}\n
 {/foreach}
@@ -36,11 +36,7 @@ Tests run : {testsRun}, Failures : {testsFailed}, Successes : {testsPassed}
    {foreach tests}
    <testcase classname="{@name}" name="{name()}">
       {if . !== true}
-         {if typeof . === 'string'}
-      <failure type="undefined">{.}</failure>
-         {:else}
-      <failure type="{name}">{message}</failure>
-         {/if}
+      <failure message="{name}: {message}">{stack}</failure>
       {/if}
    </testcase>
    {/foreach}
