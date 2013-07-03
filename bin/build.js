@@ -31,6 +31,7 @@ var fileParts = [
    'UnitTestRunner',
    'getFiles',
    'handleConfig',
+   'handleNoConfig',
    'bootstrap'
 ];
 var i,len;

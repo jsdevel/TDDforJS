@@ -15,18 +15,22 @@ Sources Tested: {getPercentUnitTested()}%
 Suites  Run   : {getNumberOfTestSuites()}
 Tests   Run   : {getNumberOfTestsRun()}, Tests Failed: {getNumberOfTestsFailed()}, Tests Passed: {getNumberOfTestsPassed()}
 
-TEST SUITE RESULTS
+{if getNumberOfTestsFailed() > 0}
 
+TEST SUITE RESULTS
 {foreach @results}
+{if testsFailed > 0}
 Testsuite : {name()}
 Tests run : {testsRun}, Failures : {testsFailed}, Successes : {testsPassed}
 {foreach tests}
 {if . !== true}
    FAILED : {name()}
-          : {name + ' - ' + message}
+          : {name + ' - ' + message |e}
 {/if}
 {/foreach}\n
+{/if}
 {/foreach}
+{/if}
 {/template}
 
 {template junit}
