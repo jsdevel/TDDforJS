@@ -11,7 +11,5 @@ function RunTimeError(error){
            "An unknown error occurred while evaluating the test case.";
 }
 RunTimeError.prototype = new Error();
-RunTimeError.prototype.name = RunTimeError.name;
-!function(global){
-   __$$__RunTimeError=RunTimeError;
-}(this);
+RunTimeError.prototype.constructor = RunTimeError;
+__$$__RunTimeError=RunTimeError;
