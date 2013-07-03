@@ -22,36 +22,42 @@ var DIRS={
    BUILD:path.resolve(__dirname, "../build"),
    SRC:path.resolve(__dirname, "../src")
 };
-var fileParts = [
-   'AppFactory',
-   'ImportResolver',
-   'RunTimeError',
-   'UnitTestResolver',
-   'UnitTestReporter',
-   'UnitTestRunner',
-   'getFiles',
-   'handleConfig',
-   'handleNoConfig',
-   'bootstrap'
-];
 var i,len;
-var outputFile=[
-   "#!/bin/env node",
-   getContentsOf("TDDforJSEvaluator"),
-   "!function(){"
-].join('\n');
-
+var outputFile;
 if(!fs.existsSync(DIRS.BUILD)){
    fs.mkdir(DIRS.BUILD);
 }
 
-fileParts.forEach(function(v){
-   outputFile+=getContentsOf(v);
-});
-outputFile+=("}();");
+outputFile=[
+   "#!/bin/env node",
+   "!function(){",
+   getContentsOf("TDDforJSEvaluator"),
+   "!function(){",
+   buildFileParts([
+      'AppFactory',
+      'ImportResolver',
+      'RunTimeError',
+      'UnitTestResolver',
+      'UnitTestReporter',
+      'UnitTestRunner',
+      'getFiles',
+      'handleConfig',
+      'handleNoConfig',
+      'bootstrap'
+   ]),
+   "}();",
+   "}();"
+].join('\n');
 
 fs.writeFileSync(path.resolve(DIRS.BUILD, "TDDforJS.js"), outputFile, "UTF8");
 
+function buildFileParts(array){
+   var result=[];
+   array.forEach(function(v){
+      result.push(getContentsOf(v));
+   });
+   return result.join('\n');
+}
 function getContentsOf(file){
    return fs.readFileSync(path.resolve(DIRS.SRC, 'js', file+".js"), "UTF8");
 }
