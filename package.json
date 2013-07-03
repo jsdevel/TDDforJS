@@ -1,6 +1,6 @@
 {
   "name": "tddforjs",
-  "version": "3.3.0",
+  "version": "3.3.1",
   "description": "A Test Driven Development framework for Javascript.",
   "preferGlobal": false,
   "main": "./TDDforJS.js",
@@ -18,7 +18,7 @@
     "xforjs":"x.x.x"
   },
   "scripts":{
-    "prepublish":"npm build",
+    "prepublish":"npm run-script build",
     "build":"$(npm bin)/xforjs;bin/build.js",
     "run":"npm run-script build;node build/TDDforJS.js",
     "test":"node build/TDDforJS.js"

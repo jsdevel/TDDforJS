@@ -2,6 +2,8 @@
  * @constructor
  */
 function TDDforJSEvaluator(){
+   //prevent the constructor from being overridden;
+   var TDDforJSEvaluator;
    var __$$__originalGlobalScope={};
    var __$$__globalScope=(function(){return this;})();
    var __$$__reset=function(){
