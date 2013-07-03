@@ -1,10 +1,10 @@
 //import lib/jsmockito
 
-/** @type {TDDforJSEvaluator} */
+/** @type {TDDEvaluator} */
 var evaluator;
 
 function before(){
-   evaluator = new TDDforJSEvaluator();
+   evaluator = new TDDEvaluator();
 }
 
 function test_mappedResults_should_not_be_accessible(){

@@ -14,15 +14,15 @@ function AppFactory(fsModule, pathModule){
       return new ImportResolver(fsModule, pathModule, sourceBase, testBase);
    };
 
-   /** @return {TDDforJSEvaluator} */
-   this.makeTDDforJSEvaluator=function(){
-      return new TDDforJSEvaluator();
+   /** @return {TDDEvaluator} */
+   this.makeTDDEvaluator=function(){
+      return new TDDEvaluator();
    };
 
    /**
     * @param {string} sourcePath
     * @param {string} unitPath
-    * @return {TDDforJSEvaluator}
+    * @return {TDDEvaluator}
     */
    this.makeUnitTestResolver=function(sourcePath, unitPath){
       return new UnitTestResolver(
@@ -43,7 +43,7 @@ function AppFactory(fsModule, pathModule){
    };
 
    /**
-    * @param {TDDforJSEvaluator} evaluator
+    * @param {TDDEvaluator} evaluator
     * @param {UnitTestReporter} reporter
     * @param {UnitTestResolver} unitTestResolver
     * @param {ImportResolver} importResolver

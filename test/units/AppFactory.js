@@ -11,10 +11,10 @@ function test_ImportResolver_should_be_creatable(){
       throw "ImportResolver wasn't created.";
    }
 }
-function test_TDDforJSEvaluator_should_be_creatable(){
-   TDDforJSEvaluator = function(){};
-   if(!(factory.makeTDDforJSEvaluator() instanceof TDDforJSEvaluator)){
-      throw "TDDforJSEvaluator wasn't created.";
+function test_TDDEvaluator_should_be_creatable(){
+   TDDEvaluator = function(){};
+   if(!(factory.makeTDDEvaluator() instanceof TDDEvaluator)){
+      throw "TDDEvaluator wasn't created.";
    }
 }
 function test_UnitTestResolver_should_be_creatable(){

@@ -25,7 +25,7 @@ function handleConfig(result, appFactory, templates){
    var unitTestResolver;
    /** @type {ImportResolver} */
    var importResolver;
-   /** @type {TDDforJSEvaluator} */
+   /** @type {TDDEvaluator} */
    var evaluator;
    /** @type {string} */
    var report;
@@ -44,7 +44,7 @@ function handleConfig(result, appFactory, templates){
 
    unitTestResolver=appFactory.makeUnitTestResolver(js_dir, units_dir);
    importResolver=appFactory.makeImportResolver(src_dir, test_dir);
-   evaluator = appFactory.makeTDDforJSEvaluator();
+   evaluator = appFactory.makeTDDEvaluator();
 
    sources        = getFiles(js_dir,          sourceFilePatterns, 100)
                      .map(getRelativePathFn(js_dir));

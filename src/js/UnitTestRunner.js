@@ -1,6 +1,6 @@
 /**
  * @constructor
- * @param {TDDforJSEvaluator} evaluator
+ * @param {TDDEvaluator} evaluator
  * @param {UnitTestReporter} reporter
  * @param {UnitTestResolver} unitTestResolver
  * @param {ImportResolver} importResolver

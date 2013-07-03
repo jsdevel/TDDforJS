@@ -1,4 +1,4 @@
-TDDforJS
+TDD
 ========
 
 A Test Driven Development framework for Javascript.  TDD aims to provide a very
@@ -12,16 +12,16 @@ node and npm
 
 Setup
 ========
-1. `npm install tddforjs`
-2. Create `config/tddforjs.json` within your project root.
+1. `npm install tdd`
+2. Create `config/tdd.json` within your project root.
 3. Set the appropritate values within the config file.
-4. `$(npm bin)/tddforjs`
+4. `$(npm bin)/tdd`
 
 It's really that simple.
 
 Config
 ========
-TDD uses config-tools to look for a `config/tddforjs.json` file within your project root.
+TDD uses config-tools to look for a `config/tdd.json` file within your project root.
 
 The following is an example config file:
 `````
@@ -88,9 +88,9 @@ function before(){
 function after(){
 }
 
-function test_TDDforJSEvaluator_should_be_creatable(){
-   TDDforJSEvaluator = function(){};
-   if(!(factory.makeTDDforJSEvaluator() instanceof TDDforJSEvaluator)){
+function test_TDDEvaluator_should_be_creatable(){
+   TDDEvaluator = function(){};
+   if(!(factory.makeTDDEvaluator() instanceof TDDEvaluator)){
       throw 5
    }
 }
@@ -122,15 +122,15 @@ And here's the source file:
  */
 function AppFactory(fsModule, pathModule){
 
-   /** @return {TDDforJSEvaluator} */
-   this.makeTDDforJSEvaluator=function(){
-      return new TDDforJSEvaluator();
+   /** @return {TDDEvaluator} */
+   this.makeTDDEvaluator=function(){
+      return new TDDEvaluator();
    };
 
    /**
     * @param {string} sourcePath
     * @param {string} unitPath
-    * @return {TDDforJSEvaluator}
+    * @return {TDDEvaluator}
     */
    this.makeUnitTestResolver=function(sourcePath, unitPath){
       return new UnitTestResolver(
@@ -151,7 +151,7 @@ function AppFactory(fsModule, pathModule){
    };
 
    /**
-    * @param {TDDforJSEvaluator} evaluator
+    * @param {TDDEvaluator} evaluator
     * @param {UnitTestReporter} reporter
     * @param {UnitTestResolver} resolver
     * @returns {UnitTestRunner}
@@ -190,7 +190,7 @@ Tests run : 5, Failures : 1, Successes : 4
 Testsuite : ImportResolver.js
 Tests run : 3, Failures : 0, Successes : 3
 
-Testsuite : TDDforJSEvaluator.js
+Testsuite : TDDEvaluator.js
 Tests run : 3, Failures : 0, Successes : 3
 ``````
 Here's what a junit report looks like for hudson and jenkins:
@@ -204,7 +204,7 @@ name="test_ImportResolver_should_be_creatable">
 
    </testcase>
    <testcase classname="AppFactory.js"
-name="test_TDDforJSEvaluator_should_be_creatable">
+name="test_TDDEvaluator_should_be_creatable">
 
    </testcase>
    <testcase classname="AppFactory.js"

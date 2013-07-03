@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * For more info, visit http://jsdevel.github.com/TDDforJS/
+ * For more info, visit http://jsdevel.github.com/TDD/
  */
 var path = require('path');
 var fs = require('fs');
@@ -36,7 +36,7 @@ var fileParts = [
 var i,len;
 var outputFile=[
    "#!/bin/env node",
-   getContentsOf("TDDforJSEvaluator"),
+   getContentsOf("TDDEvaluator"),
    "!function(){"
 ].join('\n');
 
@@ -49,7 +49,7 @@ fileParts.forEach(function(v){
 });
 outputFile+=("}();");
 
-fs.writeFileSync(path.resolve(DIRS.BUILD, "TDDforJS.js"), outputFile, "UTF8");
+fs.writeFileSync(path.resolve(DIRS.BUILD, "TDD.js"), outputFile, "UTF8");
 
 function getContentsOf(file){
    return fs.readFileSync(path.resolve(DIRS.SRC, 'js', file+".js"), "UTF8");

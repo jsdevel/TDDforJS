@@ -1,15 +1,15 @@
 {
-  "name": "tddforjs",
-  "version": "3.2.3",
+  "name": "tdd",
+  "version": "0.0.0",
   "description": "A Test Driven Development framework for Javascript.",
   "preferGlobal": false,
-  "main": "./TDDforJS.js",
+  "main": "./TDD.js",
   "author": {
     "name": "Joseph Spencer",
     "email": "js.developer.undefined@gmail.com"
   },
   "bin":{
-    "tddforjs":"build/TDDforJS.js"
+    "tdd":"build/TDD.js"
   },
   "dependencies":[
     "config-tools"
@@ -20,8 +20,8 @@
   "scripts":{
     "prepublish":"npm build",
     "build":"$(npm bin)/xforjs;bin/build.js",
-    "run":"npm run-script build;node build/TDDforJS.js",
-    "test":"node build/TDDforJS.js"
+    "run":"npm run-script build;node build/TDD.js",
+    "test":"node build/TDD.js"
   },
   "keywords": [
     "javascript",
@@ -35,7 +35,7 @@
   "license": "apache 2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jsdevel/TDDforJS.git"
+    "url": "https://github.com/jsdevel/TDD.git"
   },
   "readmeFilename": "README.md",
   "engines": {
