@@ -23,7 +23,7 @@ Tests run : {testsRun}, Failures : {testsFailed}, Successes : {testsPassed}
 {foreach tests}
 {if . !== true}
    FAILED : {name()}
-          : {name + ' - ' + message}
+          : {name + ' - ' + message |e}
 {/if}
 {/foreach}\n
 {/foreach}
