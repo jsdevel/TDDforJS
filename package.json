@@ -21,7 +21,8 @@
     "prepublish":"npm run-script build",
     "build":"$(npm bin)/xforjs;bin/build.js",
     "run":"npm run-script build;node build/TDDforJS.js",
-    "test":"node build/TDDforJS.js"
+    "test":"node build/TDDforJS.js",
+    "watch-test":"bin/watchTestsWithInotifyWait.bash"
   },
   "keywords": [
     "javascript",
