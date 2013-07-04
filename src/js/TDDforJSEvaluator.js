@@ -31,4 +31,32 @@ function TDDforJSEvaluator(){
    __$$__instance.eval=function(code, __$$__mappedResults){
       return eval(code);
    };
+
+   /**
+    * Checks a script to see if it has errors.
+    * @param {string} code
+    * @returns {Boolean}
+    */
+   __$$__instance.checkScriptForError=function(code){
+      try {
+         eval(code);
+         return false;
+      } catch(e){
+         return true;
+      }
+   };
+
+   /**
+    * Returns an error from a bad script.
+    * @param {string} code
+    * @returns {Error}
+    */
+   __$$__instance.getEarlyErrorFromScript=function(code){
+      try {
+         eval(code);
+         if_you_see_this_error_it_means_TDD_is_flawed_please_report_it;
+      } catch(e){
+         return e;
+      }
+   };
 }

@@ -22,6 +22,20 @@ function test_globally_defined_variables_should_be_accessible(){
    evaluator.eval("asdf=5;");
    assert.equal(asdf, 5);
 }
+function test_check_early_script_error(){
+   var hasError;
+   hasError=evaluator.checkScriptForError("asdfasdfasdfasdf");
+   assert(hasError, "check early returned false for an error.");
+   hasError=evaluator.checkScriptForError("true");
+   assert(!hasError, "check early works true for no error.");
+}
+function test_get_script_error(){
+   var error;
+   error=evaluator.getEarlyErrorFromScript("asdfasdfasdfasdf");
+   assert(error instanceof Error, "no error was thrown on bad code.");
+   error=evaluator.getEarlyErrorFromScript("true");
+   assert(error instanceof Error, "no error was thrown on good code.");
+}
 
 function assertNoGlobalVarsAcrossTests(){
    assert(typeof asdf === 'undefined', "global vars should not cross tests.");
