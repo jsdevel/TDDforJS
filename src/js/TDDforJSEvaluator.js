@@ -28,7 +28,7 @@ function TDDforJSEvaluator(){
     * @param {Object} __$$__mappedResults
     * @returns {unresolved}
     */
-   __$$__instance.eval=function(code, __$$__mappedResults){
+   this.__$$__eval=function(code, __$$__mappedResults){
       return eval(code);
    };
 
@@ -37,7 +37,7 @@ function TDDforJSEvaluator(){
     * @param {string} code
     * @returns {Boolean}
     */
-   __$$__instance.checkScriptForError=function(code){
+   this.__$$__checkScriptForError=function(code){
       try {
          eval(code);
          return false;
@@ -51,7 +51,7 @@ function TDDforJSEvaluator(){
     * @param {string} code
     * @returns {Error}
     */
-   __$$__instance.getEarlyErrorFromScript=function(code){
+   this.__$$__getEarlyErrorFromScript=function(code){
       try {
          eval(code);
          if_you_see_this_error_it_means_TDD_is_flawed_please_report_it;
