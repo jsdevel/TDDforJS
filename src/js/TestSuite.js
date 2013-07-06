@@ -126,6 +126,7 @@ function TestSuite(
       if(!testSuiteString){
          numberOfTestCases=testCases.length;
          testSuiteString=[
+            "!function(){",
             source,
             "!function(){",
             results+".testCases=[];",
@@ -188,6 +189,7 @@ function TestSuite(
          testSuiteString+=[
             '',
                results+".time=(Date.now()-"+results+".time)/1000;",
+            "}();",
             "}();",
             ''
          ].join('\n');
