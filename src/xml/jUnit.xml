@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+   <!-- name      class name without package. -->
+   <!-- timestamp ISO8601_DATETIME_PATTERN yyyy-MM-dd'T'HH:mm:ss. -->
+   <!-- hostname  E.G. "localhost". -->
+   <!-- tests     total tests in the suite. -->
+   <!-- failures  total tests in the suite that explicitly failed due to assertion methods. -->
+   <!-- errors    total tests that had unexpected problems. -->
+   <!-- time      time taken in seconds to run the suite E.G. "3.25" -->
+   <!-- package   derived from the name of the class. -->
+   <!-- id        starts at 0 for the first testsuite, and increments by one for each one thereafter. -->
+   <testsuite name="" timestamp="" hostname="" tests="" failures="" errors="" time="" package="" id="">
+      <!-- system env properties that were set during the time of test execution. -->
+      <properties>
+         <property name="" value=""></property>
+      </properties>
+      <!-- time      time taken in seconds to run the case E.G. "3.25" -->
+      <testcase name="method_name" classname="some.foo.too.ClassName" time="3.25">
+         <!-- only one of the following -->
+         <error message="not defined" type="ReferenceError"></error>
+         <failure message="this not equal to that" type="AssertionError"></failure>
+      </testcase>
+      <!-- white space is preserved on the element contents. -->
+      <system-out></system-out>
+      <system-err></system-err>
+   </testsuite>
+</testsuites>
