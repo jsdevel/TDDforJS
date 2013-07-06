@@ -6,11 +6,15 @@
  * @param {string} prefix Prefix of the testSuiteResults variable used in the
  * evaled code.  This allows us to unit test this class.
  * @param {string} className E.G. foo.Foo
+ * @param {string} hostname
+ * @param {number} id
  * @param {string} source
  */
 function TestSuite(
    prefix,
    className,
+   hostname,
+   id,
    source
 ){
    /** @type {RegExp} */
@@ -54,9 +58,18 @@ function TestSuite(
    if(typeof className !== 'string'){
       throw new Error("className must be a string representing the full classname of the suite.");
    }
+   if(!hostname || typeof hostname !== 'string'){
+      throw new Error("hostname must be a string representing the hostname of the machine that the test is curently running on.");
+   }
+   //this catches NaN
+   if(!(id>=0)){
+      throw new Error("id must be a number above or equal to zero.  It represents the current index of the test suite.");
+   }
    if(!source || typeof source !== 'string'){
       throw new Error("source must be a non empty string representing the contents of a suite.");
    }
+
+
    if(!reg_className.test(className)){
       throw new Error("A valid className must be given: "+className);
    }
@@ -98,7 +111,8 @@ function TestSuite(
    };
 
    /**
-    * Returns the runnable source of the test suite including test cases.
+    * Returns the runnable source of the test suite including setup and tear
+    * down of the test cases.
     *
     * @returns {string}
     */
@@ -118,6 +132,8 @@ function TestSuite(
             results+".name='"+simpleClassName+"';",
             results+".package='"+package+"';",
             results+".tests="+numberOfTestCases+";",
+            results+".hostname='"+hostname+"';",
+            results+".id="+id+";",
             results+".errors=0;",
             results+".failures=0;",
             //this is just for starters.  Replace it after running the cases.

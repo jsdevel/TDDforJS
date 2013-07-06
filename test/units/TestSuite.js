@@ -3,6 +3,8 @@ var testSuite;
 var results;
 var prefix="_";
 var className="foo.Foo";
+var hostname="localhost";
+var id=0;
 //these are here to support the evaled code from the toString() method.
 var _store;
 var _reset;
@@ -31,64 +33,89 @@ function before(){
 }
 function test_constructor_should_force_prefix_as_string(){
    assert['throws'](function(){
-      new TestSuite(null, className, "asdf");
+      new TestSuite(null, className, hostname, id, "asdf");
    });
    assert.doesNotThrow(function(){
-      new TestSuite(prefix, className, "asdf");
+      new TestSuite(prefix, className, hostname, id, "asdf");
    });
 }
 function test_constructor_should_force_className_as_string(){
    assert['throws'](function(){
-      new TestSuite(prefix, null, "asdf");
+      new TestSuite(prefix, null, hostname, id, "asdf");
    });
    assert.doesNotThrow(function(){
-      new TestSuite(prefix, "asdf", "asdf");
+      new TestSuite(prefix, "asdf", hostname, id, "asdf");
    });
 }
 function test_constructor_should_force_valid_className(){
    assert['throws'](function(){
-      new TestSuite(prefix, "-------", "asdf");
+      new TestSuite(prefix, "-------", hostname, id, "asdf");
    });
    assert['throws'](function(){
-      new TestSuite(prefix, "asdf.", "asdf");
+      new TestSuite(prefix, "asdf.", hostname, id, "asdf");
    });
    assert['throws'](function(){
-      new TestSuite(prefix, ".asdf", "asdf");
+      new TestSuite(prefix, ".asdf", hostname, id, "asdf");
    });
    assert['throws'](function(){
-      new TestSuite(prefix, "", "asdf");
+      new TestSuite(prefix, "", hostname, id, "asdf");
+   });
+   assert.doesNotThrow(function(){
+      new TestSuite(prefix, "foo.boo.Foo", hostname, id, "asdf");
+   });
+}
+function test_constructor_should_force_hostname_as_string(){
+   assert['throws'](function(){
+      new TestSuite(prefix, className, "", id, "asdf");
+   });
+   assert['throws'](function(){
+      new TestSuite(prefix, className, null, id, "asdf");
+   });
+   assert.doesNotThrow(function(){
+      new TestSuite(prefix, className, hostname, id, "asdf");
+   });
+}
+function test_constructor_should_force_id_as_number_above_or_equal_to_0(){
+   assert['throws'](function(){
+      new TestSuite(prefix, className, hostname, -1, "asdf");
+   });
+   assert['throws'](function(){
+      new TestSuite(prefix, className, hostname, ""/0, "asdf");
+   });
+   assert.doesNotThrow(function(){
+      new TestSuite(prefix, className, hostname, id, "asdf");
    });
 }
 function test_constructor_should_force_source_as_string(){
    assert['throws'](function(){
-      new TestSuite(prefix, className, null);
+      new TestSuite(prefix, className, hostname, id, null);
    });
    assert.doesNotThrow(function(){
-      new TestSuite(prefix, className, "asdf");
+      new TestSuite(prefix, className, hostname, id, "asdf");
    });
 }
 function test_hasAfter_should_be_set_appropriately(){
    assert(
-      !new TestSuite(prefix, className, sampleSuite).hasAfter(),
+      !new TestSuite(prefix, className, hostname, id, sampleSuite).hasAfter(),
       "hasAfter should be false by default"
    );
    assert(
-      new TestSuite(prefix, className, sampleSuite+"\nfunction after(){}").hasAfter(),
+      new TestSuite(prefix, className, hostname, id, sampleSuite+"\nfunction after(){}").hasAfter(),
       "hasAfter should be true when after is defined in suite."
    );
 }
 function test_hasBefore_should_be_set_appropriately(){
    assert(
-      !new TestSuite(prefix, className, sampleSuite).hasBefore(),
+      !new TestSuite(prefix, className, hostname, id, sampleSuite).hasBefore(),
       "hasBefore should be false by default"
    );
    assert(
-      new TestSuite(prefix, className, sampleSuite+"\nfunction before(){}").hasBefore,
+      new TestSuite(prefix, className, hostname, id, sampleSuite+"\nfunction before(){}").hasBefore,
       "hasBefore should be true when before is defined in suite."
    );
 }
 function test_no_tests_should_be_defined_by_default(){
-   testSuite = new TestSuite(prefix, className, "asdf");
+   testSuite = new TestSuite(prefix, className, hostname, id, "asdf");
    assert(
       !testSuite.hasTestCases() &&
       testSuite.numberOfTestCases() === 0,
@@ -96,7 +123,7 @@ function test_no_tests_should_be_defined_by_default(){
    );
 }
 function test_tests_should_be_added_when_defined_in_a_suite(){
-   testSuite = new TestSuite(prefix, className, sampleSuite);
+   testSuite = new TestSuite(prefix, className, hostname, id, sampleSuite);
    assert(testSuite.hasTestCases(),"there were no test cases defined.");
    assert.equal(testSuite.numberOfTestCases(), 4, "there were "+testSuite.numberOfTestCases()+" cases. Expected 4.");
 }
@@ -106,7 +133,7 @@ function test_resulting_source_should_execute_test(){
    var testFn = function(a){
       expected+=1;
    };
-   testSuite=new TestSuite(prefix, className, sampleSuite);
+   testSuite=new TestSuite(prefix, className, hostname, 5, sampleSuite);
    eval(testSuite.toString());
    testCases=_testSuiteResults.testCases;
    [
@@ -121,10 +148,12 @@ function test_resulting_source_should_execute_test(){
    assert.equal(expected, 3, "tests aren't calling the testFn.");
    assert.equal(_testSuiteResults.package, "foo", "package set when package exists.");
    assert.equal(_testSuiteResults.name, "Foo", "name set when package and Class exists.");
+   assert.equal(_testSuiteResults.hostname, "localhost", "hostname isn't set properly.");
+   assert.equal(_testSuiteResults.id, 5, "id isn't et properly.");
    assert.equal(testCases[0].name, "it_should_be_cool", "name set when package and Class exists.");
    assert.equal(testCases[0].className, "foo.Foo", "name set when package and Class exists.");
 
-   testSuite=new TestSuite(prefix, "Foo", sampleSuite);
+   testSuite=new TestSuite(prefix, "Foo", hostname, id, sampleSuite);
    eval(testSuite.toString());
    assert.equal(_testSuiteResults.package, "", "package not set when package does not exist.");
 }
