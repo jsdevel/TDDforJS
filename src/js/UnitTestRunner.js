@@ -99,7 +99,7 @@ function UnitTestRunner(
                      "__$$__testSuiteResults.testsPassed++;",
                      "}catch(e){",
                      "if(!(e instanceof Error)){",
-                     "e=new __$$__RunTimeError(e);",
+                     "e=new Error(e);",
                      "}",
                      "__$$__testSuiteResults.tests['"+test+"']=e;",
                      "__$$__testSuiteResults.testsFailed++;",
