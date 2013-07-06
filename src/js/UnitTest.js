@@ -4,7 +4,7 @@
  * @param {UnitTestFileResolver} fileResolver
  * @param {Object} fsModule
  * @param {TDDforJSEvaluator} evaluator
- * @param {TestAnalyzer} analyzer
+ * @param {TestSuite} analyzer
  */
 function UnitTest(
    relativePath,
@@ -38,7 +38,7 @@ function UnitTest(
       !(analyzer instanceof Object) ||
       typeof analyzer.analyzeTestSuite !== 'function'
    ){
-      throw "analyzer wasn't a TestAnalyzer .";
+      throw "analyzer wasn't a TestSuite .";
    }
 
    var results;
