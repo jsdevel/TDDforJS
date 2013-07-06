@@ -89,20 +89,20 @@ function UnitTestRunner(
             if(tests.length){
                tests.forEach(function(test){
                   testString+=[
-                     "__$$__mappedResults.testsRun++;",
+                     "__$$__testSuiteResults.testsRun++;",
                      "__$$__store();",
                      "try{",
                      hasBefore?"before();":"",
                      test+"();",
                      hasAfter?"after();":"",
-                     "__$$__mappedResults.tests['"+test+"']=true;",
-                     "__$$__mappedResults.testsPassed++;",
+                     "__$$__testSuiteResults.tests['"+test+"']=true;",
+                     "__$$__testSuiteResults.testsPassed++;",
                      "}catch(e){",
                      "if(!(e instanceof Error)){",
                      "e=new __$$__RunTimeError(e);",
                      "}",
-                     "__$$__mappedResults.tests['"+test+"']=e;",
-                     "__$$__mappedResults.testsFailed++;",
+                     "__$$__testSuiteResults.tests['"+test+"']=e;",
+                     "__$$__testSuiteResults.testsFailed++;",
                      "}",
                      "__$$__reset();"
                   ].join('\n');

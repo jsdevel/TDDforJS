@@ -25,10 +25,10 @@ function TDDforJSEvaluator(){
    };
    /**
     * @param {string} code
-    * @param {Object} __$$__mappedResults
+    * @param {Object} __$$__testSuiteResults
     * @returns {unresolved}
     */
-   this.__$$__eval=function(code, __$$__mappedResults){
+   this.__$$__eval=function(code, __$$__testSuiteResults){
       return eval(code);
    };
 
