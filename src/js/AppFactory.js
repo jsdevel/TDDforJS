@@ -62,4 +62,27 @@ function AppFactory(fsModule, pathModule){
          importResolver
       );
    };
+
+   /**
+    * @param {string} className
+    * @param {string} hostname
+    * @param {number} id
+    * @param {string} source
+    * @returns {TestSuite}
+    */
+   this.makeTestSuite=function(
+      className,
+      hostname,
+      id,
+      source
+   ){
+      return new TestSuite(
+         "__$$__",
+         className,
+         hostname,
+         id,
+         source
+      );
+   };
+
 }

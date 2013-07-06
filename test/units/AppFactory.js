@@ -1,3 +1,4 @@
+var assert = require('assert');
 var factory;
 function before(){
    factory = new AppFactory();
@@ -33,5 +34,11 @@ function test_UnitTestRunner_should_be_creatable(){
    UnitTestRunner = function(){};
    if(!(factory.makeUnitTestRunner() instanceof UnitTestRunner)){
       throw "UnitTestRunner wasn't created.";
+   }
+}
+function test_TestSuite_should_be_creatable(){
+   TestSuite = function(){};
+   if(!(factory.makeTestSuite() instanceof TestSuite)){
+      assert.fail("TestSuite wasn't created.");
    }
 }
