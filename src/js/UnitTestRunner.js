@@ -119,7 +119,7 @@ function UnitTestRunner(
                   "})();",
                   "})();"
                ].join('\n');
-               evaluator.eval(testString, results);
+               evaluator.__$$__eval(testString, results);
             }
          }
          reporter.setTestResults(path, results);

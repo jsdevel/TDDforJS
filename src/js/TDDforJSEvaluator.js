@@ -4,6 +4,7 @@
 function TDDforJSEvaluator(){
    //prevent the constructor from being overridden;
    var TDDforJSEvaluator;
+   var __$$__instance=this;
    var __$$__originalGlobalScope={};
    var __$$__globalScope=(function(){return this;})();
    var __$$__reset=function(){
@@ -24,10 +25,38 @@ function TDDforJSEvaluator(){
    };
    /**
     * @param {string} code
-    * @param {Object} mappedResults
+    * @param {Object} __$$__mappedResults
     * @returns {unresolved}
     */
-   this.eval=function(code, __$$__mappedResults){
+   this.__$$__eval=function(code, __$$__mappedResults){
       return eval(code);
+   };
+
+   /**
+    * Checks a script to see if it has errors.
+    * @param {string} code
+    * @returns {Boolean}
+    */
+   this.__$$__checkScriptForError=function(code){
+      try {
+         eval(code);
+         return false;
+      } catch(e){
+         return true;
+      }
+   };
+
+   /**
+    * Returns an error from a bad script.
+    * @param {string} code
+    * @returns {Error}
+    */
+   this.__$$__getEarlyErrorFromScript=function(code){
+      try {
+         eval(code);
+         if_you_see_this_error_it_means_TDD_is_flawed_please_report_it;
+      } catch(e){
+         return e;
+      }
    };
 }
