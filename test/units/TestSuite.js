@@ -179,5 +179,10 @@ function test_testSuite_should_return_appropriate_values(){
       "foo.Foo",
       "getClassName didn't return the right class name."
    );
+   assert.equal(
+      testSuite.getSimpleClassName(),
+      "Foo",
+      "getSimpleClassName didn't return the right simple class name."
+   );
 
 }

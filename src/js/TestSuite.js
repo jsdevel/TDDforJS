@@ -119,6 +119,14 @@ function TestSuite(
    };
 
    /**
+    * @returns {string} The simpleClassname associated with this suite.
+    */
+   this.getSimpleClassName=function(){
+      analyzeTestSuite();
+      return simpleClassName;
+   };
+
+   /**
     * @returns {string} The package associated with this suite.
     */
    this.getPackage=function(){
