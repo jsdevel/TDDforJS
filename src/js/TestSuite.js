@@ -111,6 +111,33 @@ function TestSuite(
    };
 
    /**
+    * @returns {string} The classname associated with this suite.
+    */
+   this.getClassName=function(){
+      analyzeTestSuite();
+      return className;
+   };
+
+   /**
+    * @returns {string} The package associated with this suite.
+    */
+   this.getPackage=function(){
+      analyzeTestSuite();
+      return package;
+   };
+
+
+   /**
+    * Returns the test cases in the test suite.
+    *
+    * @returns {Array}
+    */
+   this.getTestCases=function(){
+      analyzeTestSuite();
+      return [].concat(testCases);
+   };
+
+   /**
     * Returns the runnable source of the test suite including setup and tear
     * down of the test cases.
     *

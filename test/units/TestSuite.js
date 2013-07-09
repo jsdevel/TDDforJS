@@ -157,3 +157,27 @@ function test_resulting_source_should_execute_test(){
    eval(testSuite.toString());
    assert.equal(_testSuiteResults.package, "", "package not set when package does not exist.");
 }
+function test_testSuite_should_return_appropriate_values(){
+   testSuite=new TestSuite(prefix, className, hostname, id, sampleSuite);
+   assert.deepEqual(
+      testSuite.getTestCases(),
+      [
+         'it_should_be_cool',
+         'duplicate_0_it_should_be_cool',
+         '$it_should_be_cool',
+         'duplicate_1_$it_should_be_cool'
+      ],
+      "getTestCases didn't return the correct test cases."
+   );
+   assert.equal(
+      testSuite.getPackage(),
+      "foo",
+      "getPackage didn't return the right package name."
+   );
+   assert.equal(
+      testSuite.getClassName(),
+      "foo.Foo",
+      "getClassName didn't return the right class name."
+   );
+
+}
