@@ -89,12 +89,12 @@ Suite: {(['package'] && ['package']+".")+name}
                 type="unknown">
          </error>
          {:elif error}
-         <error message="{message}"
-                type="{type}">
+         <error message="{error.message}"
+                type="{error.type}">
          </error>
          {:elif failure}
-         <failure message="{message}"
-                  type="{type}">
+         <failure message="{failure.message}"
+                  type="{failure.type}">
          </failure>
          {/if}
       </testcase>
