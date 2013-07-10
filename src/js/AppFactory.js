@@ -2,8 +2,14 @@
  * @constructor
  * @param {Object} fsModule
  * @param {Object} pathModule
+ * @param {string} hostname
  */
-function AppFactory(fsModule, pathModule){
+function AppFactory(
+   fsModule,
+   pathModule,
+   hostname
+){
+   var instance = this;
 
    /**
     * @param {string} sourceBase
@@ -85,4 +91,42 @@ function AppFactory(fsModule, pathModule){
       );
    };
 
+   /**
+    * @param {Array.<string>} files
+    * @param {SuiteFileResolver} fileResolver
+    * @param {ImportResolver} importResolver
+    * @param {TDDforJSEvaluator} evaluator
+    * @param {function(string): string} extraSourceFn
+    * @returns {TestSuites}
+    */
+   this.makeTestSuites=function(
+      files,
+      fileResolver,
+      importResolver,
+      evaluator,
+      extraSourceFn
+   ){
+      return new TestSuites(
+            files,
+            instance,
+            hostname,
+            fileResolver,
+            importResolver,
+            pathModule,
+            evaluator,
+            extraSourceFn
+      );
+   };
+
+   /**
+    * @param {string} baseDir
+    * @returns {SuiteFileResolver}
+    */
+   this.makeSuiteFileResolver=function(baseDir){
+      return new SuiteFileResolver(
+         fsModule,
+         pathModule,
+         baseDir
+      );
+   };
 }

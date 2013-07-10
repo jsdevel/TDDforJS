@@ -42,3 +42,15 @@ function test_TestSuite_should_be_creatable(){
       assert.fail("TestSuite wasn't created.");
    }
 }
+function test_TestSuites_should_be_creatable(){
+   TestSuites = function(){};
+   if(!(factory.makeTestSuites() instanceof TestSuites)){
+      assert.fail("TestSuites wasn't created.");
+   }
+}
+function test_SuiteFileResolver_should_be_creatable(){
+   SuiteFileResolver = function(){};
+   if(!(factory.makeSuiteFileResolver() instanceof SuiteFileResolver)){
+      assert.fail("SuiteFileResolver wasn't created.");
+   }
+}
