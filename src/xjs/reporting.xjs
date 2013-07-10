@@ -9,7 +9,7 @@
 {template cli}
    {if units}
 {@spacer}
-Unit TEST REPORT
+UNIT TEST REPORT
 {@spacer}\n{render cli_general units/}
    {/if}
    {if integrations}\n
