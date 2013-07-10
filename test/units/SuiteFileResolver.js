@@ -15,7 +15,8 @@ function before(){
    });
 }
 
-function test_constructor_should_require_arguments_and_validate_them(){
+//Test
+function constructor_should_require_arguments_and_validate_them(){
    var isDirectory=true;
    when(mockFsModule).statSync.call(mockFsModule, "asdf").thenReturn({
       isDirectory:function(){return isDirectory;}
@@ -34,13 +35,15 @@ function test_constructor_should_require_arguments_and_validate_them(){
       new SuiteFileResolver(mockFsModule, mockPathModule, "asdf");
    }, "baseDir wasn't required to exist.");
 }
-function test_constructor_should_be_ok_with_good_arguments(){
+//Test
+function constructor_should_be_ok_with_good_arguments(){
    when(mockFsModule).statSync.call(mockFsModule, "asdf").thenReturn({
       isDirectory:function(){return true;}
    });
    new SuiteFileResolver(mockFsModule, mockPathModule, "asdf");
 }
-function test_getSuite_should_throw_exception_when_suite_does_not_exist(){
+//Test
+function getSuite_should_throw_exception_when_suite_does_not_exist(){
    when(mockFsModule).statSync.call(mockFsModule, "/asdf").thenReturn({
       isDirectory:function(){return true;}
    });
@@ -54,7 +57,8 @@ function test_getSuite_should_throw_exception_when_suite_does_not_exist(){
       resolver.getSuite("foo.js");
    });
 }
-function test_getSuite_should_not_throw_an_exception_when_suite_exists(){
+//Test
+function getSuite_should_not_throw_an_exception_when_suite_exists(){
    var contents;
    when(mockFsModule).statSync.call(mockFsModule, "/asdf").thenReturn({
       isDirectory:function(){return true;},

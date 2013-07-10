@@ -94,7 +94,10 @@ function TestSuites(
             var suite;
             var source=fileResolver.getSuite(file);
             var imports=importResolver.getImportsFrom(source);
-            var suiteResults={};
+            var suiteResults={
+               stdErr:[],
+               stdOut:[]
+            };
             var errors=[];
             var extraSource;
 
@@ -133,7 +136,7 @@ function TestSuites(
                      extraSource,
                      "!function(){",
                      imports,
-                     source,
+                     suite.toString(),
                      "}();",
                      "}();"
                   ].join('\n'),

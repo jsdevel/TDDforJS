@@ -22,7 +22,8 @@
     "build":"$(npm bin)/xforjs;bin/build.js",
     "run":"npm run-script build;node build/TDDforJS.js",
     "test":"node build/TDDforJS.js",
-    "watch-test":"bin/watchTestsWithInotifyWait.bash"
+    "watch-test":"bin/watchTestsWithInotifyWait.bash",
+    "watch-build-then-test":"bin/watchBuildThenTest.bash"
   },
   "keywords": [
     "javascript",

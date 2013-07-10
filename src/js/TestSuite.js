@@ -216,6 +216,7 @@ function TestSuite(
                      "}",
                   "}",
                   testCase+".time=(Date.now()-"+testCase+".time)/1000;",
+                  "delete "+testCase+";",
                "}();",
                prefix+"reset();",
                ''

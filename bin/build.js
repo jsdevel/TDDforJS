@@ -36,9 +36,9 @@ outputFile=[
    buildFileParts([
       'AppFactory',
       'ImportResolver',
-      'UnitTestResolver',
-      'UnitTestReporter',
-      'UnitTestRunner',
+      'SuiteFileResolver',
+      'TestSuites',
+      'TestSuite',
       'getFiles',
       'handleConfig',
       'handleNoConfig',

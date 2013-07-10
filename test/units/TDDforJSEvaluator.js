@@ -10,7 +10,8 @@ function before(){
       stdErr:[]
    };
 }
-function test___$$__eval_expects_code_to_be_a_non_string(){
+//Test
+function __$$__eval_expects_code_to_be_a_non_string(){
    assert['throws'](function(){
       evaluator.__$$__eval("", results);
    });
@@ -19,7 +20,8 @@ function test___$$__eval_expects_code_to_be_a_non_string(){
    });
    assertNoGlobalVarsAcrossTests();
 }
-function test___$$__eval_expects___$$__testSuiteResults_to_be_an_instanceof_Object(){
+//Test
+function __$$__eval_expects___$$__testSuiteResults_to_be_an_instanceof_Object(){
    assert['throws'](function(){
       evaluator.__$$__eval("true", null);
    });
@@ -28,30 +30,35 @@ function test___$$__eval_expects___$$__testSuiteResults_to_be_an_instanceof_Obje
    });
    assertNoGlobalVarsAcrossTests();
 }
-function test_the_Evaluator_should_not_be_overrideable_by_test_code(){
+//Test
+function the_Evaluator_should_not_be_overrideable_by_test_code(){
    evaluator.__$$__eval("TDDforJSEvaluator=void 0;", results);
    assert(TDDforJSEvaluator, "TDDforJSEvaluator was undefined.");
    assertNoGlobalVarsAcrossTests();
 }
-function test_globally_defined_variables_should_be_accessible(){
+//Test
+function globally_defined_variables_should_be_accessible(){
    evaluator.__$$__eval("asdf=5;", results);
    assert.equal(asdf, 5);
 }
-function test_check_early_script_error(){
+//Test
+function check_early_script_error(){
    var hasError;
    hasError=evaluator.__$$__checkScriptForError("asdfasdfasdfasdf");
    assert(hasError, "check early returned false for an error.");
    hasError=evaluator.__$$__checkScriptForError("true");
    assert(!hasError, "check early works true for no error.");
 }
-function test_get_script_error(){
+//Test
+function get_script_error(){
    var error;
    error=evaluator.__$$__getEarlyErrorFromScript("asdfasdfasdfasdf");
    assert(error instanceof Error, "no error was thrown on bad code.");
    error=evaluator.__$$__getEarlyErrorFromScript("true");
    assert(error instanceof Error, "no error was thrown on good code.");
 }
-function test_console_methods_should_be_overridden(){
+//Test
+function console_methods_should_be_overridden(){
    evaluator.__$$__eval(
       "console.log(5);console.info(2);console.dir({a:5});console.error(66);console.warn(666);",
       results

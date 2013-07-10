@@ -183,7 +183,8 @@ function before(){
    suites=new TestSuites(files, appFactory, hostname, fileResolver, importResolver, pathModule, evaluator, extraCallbackFn);
 };
 
-function test_constructor_should_typecheck_arguments(){
+//Test
+function constructor_should_typecheck_arguments(){
    assert['throws'](function(){
       new TestSuites(null, appFactory, hostname, fileResolver, importResolver, pathModule, evaluator, extraCallbackFn);
    }, "files wasn't forced to be an array.");
@@ -209,12 +210,14 @@ function test_constructor_should_typecheck_arguments(){
       new TestSuites(files, appFactory, hostname, fileResolver, importResolver, pathModule, evaluator, null);
    }, "extraSourceFn wasn't forced to be a function.");
 }
-function test_getResults_should_return_an_Object(){
+//Test
+function getResults_should_return_an_Object(){
    var results=suites.getResults();
    assert(results instanceof Object, "getResults didn't return an object.");
    assert.equal(results.total.tests, fooTests+booTests, "getResults didn't contain the number of suites run.");
 }
-function test_appFactory_should_be_called_appropriately(){
+//Test
+function appFactory_should_be_called_appropriately(){
    suites.getResults();
    verify(appFactory, times(1)).makeTestSuite.call(appFactory,
       "foo",
@@ -229,24 +232,26 @@ function test_appFactory_should_be_called_appropriately(){
       "booSource"
    );
 }
-function test_evaluator_should_be_called_appropriately(){
+//Test
+function evaluator_should_be_called_appropriately(){
    suites.getResults();
    assert.deepEqual(
       evaluatorCalls,
       [
          [
             '!function(){\n\n!function(){\nfooImports\nfooSource\n}();\n}();',
-            {failures:0,errors:0,tests:fooTests}
+            {stdErr:[],stdOut:[],failures:0,errors:0,tests:fooTests}
          ],
          [
             '!function(){\n\n!function(){\nbooImports\nbooSource\n}();\n}();',
-            {failures:0,errors:0,tests:booTests}
+            {stdErr:[],stdOut:[],failures:0,errors:0,tests:booTests}
          ]
       ],
       "evaluator isn't called with the proper arguments."
    );
 }
-function test_evaluator_should_be_called_appropriately_when_extraCallBackFn_returns_source(){
+//Test
+function evaluator_should_be_called_appropriately_when_extraCallBackFn_returns_source(){
    extraCallbackFnDelegate=function(file){
       if(file === "foo.js"){
          return "fooExternal source.";
@@ -258,18 +263,19 @@ function test_evaluator_should_be_called_appropriately_when_extraCallBackFn_retu
       [
          [
             '!function(){\nfooExternal source.\n!function(){\nfooImports\nfooSource\n}();\n}();',
-            {failures:0,errors:0,tests:fooTests}
+            {stdErr:[],stdOut:[],failures:0,errors:0,tests:fooTests}
          ],
          [
             '!function(){\n\n!function(){\nbooImports\nbooSource\n}();\n}();',
-            {failures:0,errors:0,tests:booTests}
+            {stdErr:[],stdOut:[],failures:0,errors:0,tests:booTests}
          ]
       ],
       "evaluator isn't called with the proper arguments."
    );
 }
 
-function test_results_should_get_updated_by_test_suites(){
+//Test
+function results_should_get_updated_by_test_suites(){
    isFooFailed=true;
    isBooError=true;
    var results=suites.getResults();
@@ -277,26 +283,30 @@ function test_results_should_get_updated_by_test_suites(){
    assert.equal(results.total.errors, 1, "errors aren't recorded.");
    assert.equal(results.total.tests, 7, "tests aren't recorded.");
 }
-function test_results_should_show_errors_from_bad_imports(){
+//Test
+function results_should_show_errors_from_bad_imports(){
    isBooImportBad=true;
    badBooImportError="error in import";
    var results=suites.getResults();
    assert.equal(results.total.errors, 4, "errors in imports don't stop the tests.");
 }
-function test_results_should_show_errors_from_bad_sources(){
+//Test
+function results_should_show_errors_from_bad_sources(){
    isFooSourceBad=true;
    badFooSourceError="error in source";
    var results=suites.getResults();
    assert.equal(results.total.errors, 3, "errors in sources don't stop the tests.");
 }
-function test_extraCallBackFn_should_get_called_with_each_file_in_suites(){
+//Test
+function extraCallBackFn_should_get_called_with_each_file_in_suites(){
    extraCallbackFnDelegate=mockFunction();
    suites.getResults();
    verify(extraCallbackFnDelegate)("foo.js");
    verify(extraCallbackFnDelegate)("asdf/basd==oo");
    verifyNoMoreInteractions(extraCallbackFnDelegate);
 }
-function test_extraCallBackFn_should_cause_suite_to_fail_when_an_error_is_thrown(){
+//Test
+function extraCallBackFn_should_cause_suite_to_fail_when_an_error_is_thrown(){
    extraCallbackFnDelegate=function(file){
       if(file === "foo.js"){
          throw "foo external source error.";

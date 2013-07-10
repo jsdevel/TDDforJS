@@ -7,44 +7,112 @@
 {var R "\\u001b[0m"}
 
 {template cli}
-   {var results getResults()}
+   {if units}
 {@spacer}
-TEST SUITE REPORT
+Unit TEST REPORT
+{@spacer}\n{render cli_general units/}
+   {/if}
+   {if integrations}\n
 {@spacer}
-Sources Tested: {getPercentUnitTested()}%
-Suites  Run   : {getNumberOfTestSuites()}
-Tests   Run   : {getNumberOfTestsRun()}, Tests Failed: {getNumberOfTestsFailed()}, Tests Passed: {getNumberOfTestsPassed()}
+INTEGRATION TEST REPORT
+{@spacer}\n{render cli_general integrations/}
+   {/if}
+{/template}
 
-{if getNumberOfTestsFailed() > 0}
+{template cli_general}
+Suites      : {suites.length}
+Tests       : {total.tests}
+Failures    : {total.failures}
+Errors      : {total.errors}
+{foreach suites}
+{if errors > 0 || failures > 0 || stdOut.length || stdErr.length}
 
-TEST SUITE RESULTS
-{foreach @results}
-{if testsFailed > 0}
-Testsuite : {name()}
-Tests run : {testsRun}, Failures : {testsFailed}, Successes : {testsPassed}
-{foreach tests}
-{if . !== true}
-   FAILED : {name()}
-          : {name + ' - ' + message |e}
-{/if}
-{/foreach}\n
-{/if}
+Suite: {(['package'] && ['package']+".")+name}
+  Tests     : {tests}
+  Failures  : {failures}
+  Errors    : {errors}
+      {if stdOut.length}
+  Stdout    :
+         {foreach stdOut}
+      console.{type}({arguments.join(' , ')})
+         {/foreach}
+      {/if}
+
+      {if stdErr.length}
+  Stderr    :
+         {foreach stdErrout}
+      console.{type}({arguments.join(' , ')})
+         {/foreach}
+      {/if}
+
+{foreach testCases}
+   {if errors || error || failure}
+  Case      : {name}
+      {if errors}
+    Errors  : {errors.join('\\n')}
+      {:elif error || failure}
+
+         {if error}
+    Error   : {error.type}
+            : {error.message |e}
+         {/if}
+         {if failure}
+    Failure : {failure.type}
+            : {failure.message |e}
+         {/if}
+      {/if}
+   {/if}
 {/foreach}
 {/if}
+{/foreach}
 {/template}
 
 {template junit}
-   {param name}
-<?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="{testsFailed}" name="{@name}" tests="{testsRun}">
-   {foreach tests}
-   <testcase classname="{@name}" name="{name()}">
-      {if . !== true}
-      <failure message="{name}: {message}">{stack}</failure>
-      {/if}
-   </testcase>
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+   {foreach suites}
+   <testsuite name="{name}"
+              timestamp="{timestamp}"
+              hostname="{hostname}"
+              tests="{tests}"
+              failures="{failures}"
+              errors="{errors}"
+              time="{time}"
+              package="{['package']}"
+              id="{id}">
+      {foreach testCases}
+      <testcase name="{name}"
+                classname="{className}"
+                time="{time}">
+         {if errors}
+         <error message="{errors.join('\\n')}"
+                type="unknown">
+         </error>
+         {:elif error}
+         <error message="{message}"
+                type="{type}">
+         </error>
+         {:elif failure}
+         <failure message="{message}"
+                  type="{type}">
+         </failure>
+         {/if}
+      </testcase>
+      {/foreach}
+      <system-out>
+{foreach stdOut}
+         console.{type}({arguments.join(' , ')});
+{/foreach}
+      </system-out>
+      <system-err>
+{foreach stdErr}
+         console.{type}({arguments.join(' , ')});
+{/foreach}
+{foreach testCases[0].errors}
+         Error - {.}
+{/foreach}
+      </system-err>
+   </testsuite>
    {/foreach}
-   <system-out><![CDATA[]]></system-out>
-   <system-err><![CDATA[]]></system-err>
-</testsuite>
+</testsuites>
 {/template}
