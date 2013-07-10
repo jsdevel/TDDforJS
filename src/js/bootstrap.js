@@ -6,7 +6,7 @@ var templates = eval(fs.readFileSync(path.resolve(__dirname, "reporting.js"), "U
 configTools.getConfig(
    'tddforjs',
    function(config){
-      handleConfig(config, new AppFactory(fs, path), templates);
+      handleConfig(config, new AppFactory(fs, path, require('os').hostname()), templates);
    },
    function(fileName, logger){
       handleNoConfig(

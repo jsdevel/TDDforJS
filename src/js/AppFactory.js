@@ -2,8 +2,14 @@
  * @constructor
  * @param {Object} fsModule
  * @param {Object} pathModule
+ * @param {string} hostname
  */
-function AppFactory(fsModule, pathModule){
+function AppFactory(
+   fsModule,
+   pathModule,
+   hostname
+){
+   var instance = this;
 
    /**
     * @param {string} sourceBase
@@ -20,46 +26,63 @@ function AppFactory(fsModule, pathModule){
    };
 
    /**
-    * @param {string} sourcePath
-    * @param {string} unitPath
-    * @return {TDDforJSEvaluator}
+    * @param {string} className
+    * @param {string} hostname
+    * @param {number} id
+    * @param {string} source
+    * @returns {TestSuite}
     */
-   this.makeUnitTestResolver=function(sourcePath, unitPath){
-      return new UnitTestResolver(
-         fsModule,
-         pathModule,
-         sourcePath,
-         unitPath
+   this.makeTestSuite=function(
+      className,
+      hostname,
+      id,
+      source
+   ){
+      return new TestSuite(
+         "__$$__",
+         className,
+         hostname,
+         id,
+         source
       );
    };
 
    /**
-    * @param {Array} sources
-    * @param {Array} units
-    * @return {UnitTestReporter}
+    * @param {Array.<string>} files
+    * @param {SuiteFileResolver} fileResolver
+    * @param {ImportResolver} importResolver
+    * @param {TDDforJSEvaluator} evaluator
+    * @param {function(string): string} extraSourceFn
+    * @returns {TestSuites}
     */
-   this.makeUnitTestReporter=function(sources, units){
-      return new UnitTestReporter(sources, units);
+   this.makeTestSuites=function(
+      files,
+      fileResolver,
+      importResolver,
+      evaluator,
+      extraSourceFn
+   ){
+      return new TestSuites(
+            files,
+            instance,
+            hostname,
+            fileResolver,
+            importResolver,
+            pathModule,
+            evaluator,
+            extraSourceFn
+      );
    };
 
    /**
-    * @param {TDDforJSEvaluator} evaluator
-    * @param {UnitTestReporter} reporter
-    * @param {UnitTestResolver} unitTestResolver
-    * @param {ImportResolver} importResolver
-    * @returns {UnitTestRunner}
+    * @param {string} baseDir
+    * @returns {SuiteFileResolver}
     */
-   this.makeUnitTestRunner=function(
-      evaluator,
-      reporter,
-      unitTestResolver,
-      importResolver
-   ){
-      return new UnitTestRunner(
-         evaluator,
-         reporter,
-         unitTestResolver,
-         importResolver
+   this.makeSuiteFileResolver=function(baseDir){
+      return new SuiteFileResolver(
+         fsModule,
+         pathModule,
+         baseDir
       );
    };
 }
