@@ -90,6 +90,7 @@ Here is a sample test suite.  The inspiration comes from jUnit 4.x, so the follo
 * Errors with the term `assert` in their constructor show as a failure.
 * Errors not an instanceof Error show as a failure.
 * Errors that are an instance of Error show as an error.
+
 ``````
 var assert = require('assert');
 var factory;
@@ -135,7 +136,9 @@ function SuiteFileResolver_should_be_creatable(){
    }
 }
 ``````
+
 And here's the source file:
+
 ``````
 /**
  * @constructor
@@ -225,7 +228,9 @@ function AppFactory(
       );
    };
 }
+
 ``````
+
 Importing
 ========
 TDD allows your test suites to import any javascript file for the duration of
