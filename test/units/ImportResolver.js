@@ -9,22 +9,14 @@ var testBase = "/test";
 var result;
 
 function before(){
-   mockFsModule=mock({
-      statSync:function(){},
-      readFileSync:function(){}
-   });
-   mockPathModule=mock({
-      resolve:function(){}
-   });
+   createFsMock();
+   mockPathModule={
+      resolve:function(base, last){return base+"/"+last}
+   };
    when(mockFsModule).statSync(string()).thenReturn({
       isFile:function(){return true;}
    });
-   resolver = new ImportResolver(
-      mockFsModule,
-      mockPathModule,
-      sourceBase,
-      testBase
-   );
+   createResolver();
 }
 
 //Test
@@ -86,20 +78,50 @@ function empty_string_should_be_returned_if_no_imports_are_defined_in_source(){
    ]), "");
 }
 //Test
-function files_under_the_test_dir_should_be_imported_over_files_under_the_source_dir(){
-   result=resolver.getImportsFrom("foo");
-   //verify(mockFsModule, times(1)).readFileSync("/test/foo.js", "UTF8");
+function files_under_the_test_dir_should_be_imported_over_files_under_the_source_dir_when_files_exist_in_both_locations(){
+   result=resolver.getImportsFrom("//import foo\n//import boo");
+   verify(mockFsModule, times(1)).statSync("/test/foo.js");
+   verify(mockFsModule, times(0)).statSync("/src/foo.js");
+   verify(mockFsModule, times(1)).readFileSync("/test/foo.js", "UTF8");
+   verify(mockFsModule, times(0)).readFileSync("/src/foo.js", "UTF8");
 }
 //Test
 function non_existant_files_under_the_test_dir_should_not_be_imported_over_files_under_the_source_dir(){
-   //when(mockFsModule).existsSync("/test/foo.js").thenReturn(false);
-   //when(mockFsModule).existsSync("/src/foo.js").thenReturn(true);
-   resolver.getImportsFrom("foo");
-   //verify(mockFsModule, times(1)).readFileSync("/src/foo.js", "UTF8");
+   when(mockFsModule).statSync("/test/foo.js").thenReturn({
+      isFile:function(){return false;}
+   });
+   when(mockFsModule).readFileSync("/src/foo.js", "UTF8").thenReturn("foo source");
+   result=resolver.getImportsFrom("//import foo\n//import boo\n");
+   verify(mockFsModule, times(1)).statSync("/test/foo.js");
+   verify(mockFsModule, times(1)).statSync("/src/foo.js");
+   verify(mockFsModule, times(1)).readFileSync("/src/foo.js", "UTF8");
+   assert(result.indexOf("foo source") > -1, "source was not added to imports");
 }
 //Test
 function an_exception_should_be_thrown_when_the_file_does_not_exist_in_either_src_or_test(){
-   //when(mockFsModule).existsSync("/test/foo.js").thenReturn(false);
-   //when(mockFsModule).existsSync("/src/foo.js").thenReturn(false);
-   //resolver.getImportsFrom("foo");
+   when(mockFsModule).statSync("/test/foo.js").thenReturn({
+      isFile:function(){return false;}
+   });
+   when(mockFsModule).statSync("/src/foo.js").thenReturn({
+      isFile:function(){return false;}
+   });
+   result=resolver.getImportsFrom("//import foo\n//import boo\n");
+   verify(mockFsModule, times(1)).statSync("/test/foo.js");
+   verify(mockFsModule, times(1)).statSync("/src/foo.js");
+   assert(result.indexOf('throw new Error') > -1, "no error js was added to the imports.");
+}
+
+function createFsMock(){
+   mockFsModule=mock({
+      statSync:function(){},
+      readFileSync:function(){}
+   });
+}
+function createResolver(){
+   resolver = new ImportResolver(
+      mockFsModule,
+      mockPathModule,
+      sourceBase,
+      testBase
+   );
 }
