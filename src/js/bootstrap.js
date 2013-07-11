@@ -8,18 +8,20 @@ configTools.getConfig(
    function(config){
       handleConfig(config, new AppFactory(fs, path, require('os').hostname()), templates);
    },
-   function(fileName, logger){
-      handleNoConfig(
-         fileName,
-         logger,
-         fs,
-         path,
-         process,
-         fs.readFileSync(
-            path.resolve(__dirname, "../src/js/default-config.json"),
-            "UTF8"
-         )
-      );
+   function(fileName, logger, isFound){
+      if(!isFound){
+         handleNoConfig(
+            fileName,
+            logger,
+            fs,
+            path,
+            process,
+            fs.readFileSync(
+               path.resolve(__dirname, "../src/js/default-config.json"),
+               "UTF8"
+            )
+         );
+      }
    }
 );
 
