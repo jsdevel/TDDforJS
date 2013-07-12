@@ -22,7 +22,11 @@ function TestSuite(
    /** @type {RegExp} */
    var reg_testAfter=/^function\s+after[^a-zA-Z0-9_$]+/m;
    /** @type {RegExp} */
+   var reg_testAfterSuite=/^function\s+afterSuite[^a-zA-Z0-9_$]+/m;
+   /** @type {RegExp} */
    var reg_testBefore=/^function\s+before[^a-zA-Z0-9_$]+/m;
+   /** @type {RegExp} */
+   var reg_testBeforeSuite=/^function\s+beforeSuite[^a-zA-Z0-9_$]+/m;
    /** @type {RegExp} */
    var reg_blockComments=/\/\*(?:(?!\*\/)[\s\S])*\*\//g;
    /** @type {RegExp} */
@@ -42,7 +46,11 @@ function TestSuite(
    /** @type {boolean} */
    var hasAfter=false;
    /** @type {boolean} */
+   var hasAfterSuite=false;
+   /** @type {boolean} */
    var hasBefore=false;
+   /** @type {boolean} */
+   var hasBeforeSuite=false;
    /** @type {string} */
    var testCases=[];
    /** @type {string} */
@@ -84,12 +92,30 @@ function TestSuite(
    };
 
    /**
-    * Inform the caller if the testSuite had a "before" method defined.
+    * Inform the caller if the testSuite had an "afterSuite" function defined.
+    * @returns {boolean}
+    */
+   this.hasAfterSuite=function(){
+      analyzeTestSuite();
+      return hasAfterSuite;
+   };
+
+   /**
+    * Inform the caller if the testSuite had a "before" function defined.
     * @returns {boolean}
     */
    this.hasBefore=function(){
       analyzeTestSuite();
       return hasBefore;
+   };
+
+   /**
+    * Inform the caller if the testSuite had a "beforeSuite" function defined.
+    * @returns {boolean}
+    */
+   this.hasBeforeSuite=function(){
+      analyzeTestSuite();
+      return hasBeforeSuite;
    };
 
    /**
@@ -174,7 +200,8 @@ function TestSuite(
             results+".failures=0;",
             //this is just for starters.  Replace it after running the cases.
             results+".time=Date.now();",
-            results+".timestamp=new Date().toISOString();"
+            results+".timestamp=new Date().toISOString();",
+            hasBeforeSuite ?"beforeSuite();":""
          ].join('\n');
          for(i=0;i<numberOfTestCases;i++){
             testCaseName=testCases[i];
@@ -223,8 +250,9 @@ function TestSuite(
             ].join('\n');
          }
          testSuiteString+=[
-            '',
+               '',
                results+".time=(Date.now()-"+results+".time)/1000;",
+               hasAfterSuite ?"afterSuite();":"",
             "}();",
             "}();",
             ''
@@ -251,7 +279,9 @@ function TestSuite(
             return id;
          });
          hasAfter=reg_testAfter.test(source);
+         hasAfterSuite=reg_testAfterSuite.test(source);
          hasBefore=reg_testBefore.test(source);
+         hasBeforeSuite=reg_testBeforeSuite.test(source);
          source=source.replace(reg_test, function(match, name){
             var duplicate;
             if(name in duplicateTestCases){

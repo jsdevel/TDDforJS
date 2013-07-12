@@ -26,6 +26,7 @@ var sampleSuite=[
 ].join('\n');
 
 function before(){
+   console.log(6);
    _store=function(){};
    _reset=function(){};
    _testSuiteResults={};
@@ -112,13 +113,35 @@ function hasAfter_should_be_set_appropriately(){
    );
 }
 //Test
+function hasAfterSuite_should_be_set_appropriately(){
+   assert(
+      !new TestSuite(prefix, className, hostname, id, sampleSuite).hasAfterSuite(),
+      "hasAfter should be false by default"
+   );
+   assert(
+      new TestSuite(prefix, className, hostname, id, sampleSuite+"\nfunction afterSuite(){}").hasAfterSuite(),
+      "hasAfter should be true when after is defined in suite."
+   );
+}
+//Test
 function hasBefore_should_be_set_appropriately(){
    assert(
       !new TestSuite(prefix, className, hostname, id, sampleSuite).hasBefore(),
       "hasBefore should be false by default"
    );
    assert(
-      new TestSuite(prefix, className, hostname, id, sampleSuite+"\nfunction before(){}").hasBefore,
+      new TestSuite(prefix, className, hostname, id, sampleSuite+"\nfunction before(){}").hasBefore(),
+      "hasBefore should be true when before is defined in suite."
+   );
+}
+//Test
+function hasBeforeSuite_should_be_set_appropriately(){
+   assert(
+      !new TestSuite(prefix, className, hostname, id, sampleSuite).hasBeforeSuite(),
+      "hasBefore should be false by default"
+   );
+   assert(
+      new TestSuite(prefix, className, hostname, id, sampleSuite+"\nfunction beforeSuite(){}").hasBeforeSuite(),
       "hasBefore should be true when before is defined in suite."
    );
 }
