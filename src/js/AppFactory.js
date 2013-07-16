@@ -85,4 +85,11 @@ function AppFactory(
          baseDir
       );
    };
+
+   /**
+    * @returns {TDD}
+    */
+   this.makeTDD=function(){
+      return new TDD();
+   };
 }

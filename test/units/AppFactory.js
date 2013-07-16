@@ -41,3 +41,10 @@ function SuiteFileResolver_should_be_creatable(){
       assert.fail("SuiteFileResolver wasn't created.");
    }
 }
+//Test
+function TDD_should_be_createble(){
+   TDD = function(){};
+   if(!(factory.makeTDD() instanceof TDD)){
+      assert.fail("TDD wasn't created.");
+   }
+}

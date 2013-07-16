@@ -83,6 +83,7 @@ var booSuite={
       return 4;
    }
 };
+var fooTdd={overrides:{}};
 
 function before(){
    extraCallbackFnDelegate=function(){};
@@ -117,6 +118,7 @@ function before(){
       1,
       "booSource"
    ).thenReturn(booSuite);
+   when(appFactory).makeTDD.call(appFactory).thenReturn(fooTdd);
 
    fileResolver=mock(_SuiteFileResolver);
    fileResolver.constructor={name:"SuiteFileResolver"};
@@ -231,6 +233,7 @@ function appFactory_should_be_called_appropriately(){
       1,
       "booSource"
    );
+   verify(appFactory, times(2)).makeTDD.call(appFactory);
 }
 //Test
 function evaluator_should_be_called_appropriately(){

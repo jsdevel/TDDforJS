@@ -140,7 +140,8 @@ function TestSuites(
                      "}();",
                      "}();"
                   ].join('\n'),
-                  suiteResults
+                  suiteResults,
+                  appFactory.makeTDD()
                );
             } else {
                suiteResults.testCases=[];

@@ -35,6 +35,7 @@ outputFile=[
    "!function(){",
    buildFileParts([
       'AppFactory',
+      'TDD',
       'ImportResolver',
       'SuiteFileResolver',
       'TestSuites',
