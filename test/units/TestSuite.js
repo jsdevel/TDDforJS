@@ -26,7 +26,6 @@ var sampleSuite=[
 ].join('\n');
 
 function before(){
-   console.log(6);
    _store=function(){};
    _reset=function(){};
    _testSuiteResults={};
