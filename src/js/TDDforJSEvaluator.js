@@ -28,21 +28,21 @@ function TDDforJSEvaluator(){
     * @param {Object} __$$__testSuiteResults
     * @returns {unresolved}
     */
-   this.__$$__eval=function(code, __$$__testSuiteResults, tdd){
+   this.__$$__eval=function(code, __$$__testSuiteResults, TDD){
       if(!code || typeof code !== 'string'){
          throw new Error("code must be a non empty string.");
       }
       if(!(__$$__testSuiteResults instanceof Object)){
          throw new Error("__$$__testSuiteResults must be an instanceof Object.");
       }
-      if(!(tdd instanceof Object)){
+      if(!(TDD instanceof Object)){
          throw new Error("TDD must be an instanceof Object.");
       }
 
-      var setTimeout=tdd.overrides.setTimeout;
-      var setInterval=tdd.overrides.setInterval;
-      var clearTimeout=tdd.overrides.clearTimeout;
-      var clearInterval=tdd.overrides.clearInterval;
+      var setTimeout=TDD.overrides.setTimeout;
+      var setInterval=TDD.overrides.setInterval;
+      var clearTimeout=TDD.overrides.clearTimeout;
+      var clearInterval=TDD.overrides.clearInterval;
 
       var console={
          log:function(){
