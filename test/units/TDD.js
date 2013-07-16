@@ -15,10 +15,23 @@
  */
 var assert;
 var tdd;
+var session;
 
 function before(){
+   session={};
    assert=require('assert');
-   tdd=new TDD();
+   tdd=new TDD(session);
+}
+
+//Test
+function session_must_be_an_object(){
+   assert['throws'](function(){
+      new TDD(null);
+   }, "session wasn't required to be an object.");
+}
+function session_data_should_be_available(){
+   session.foo=5;
+   assert.equal(tdd.session.foo, 5, "session data wasn't available.");
 }
 
 //Test

@@ -1,9 +1,16 @@
 var assert = require('assert');
 var factory;
+var session;
 function before(){
-   factory = new AppFactory();
+   session={};
+   factory = new AppFactory(void 0, void 0, "foo", session);
 }
-function after(){
+
+//Test
+function session_must_be_an_object(){
+   assert['throws'](function(){
+      new AppFactory(void 0, void 0, "foo", null);
+   }, "session wasn't required to be an Object.");
 }
 
 //Test

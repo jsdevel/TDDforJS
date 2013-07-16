@@ -3,13 +3,19 @@
  * @param {Object} fsModule
  * @param {Object} pathModule
  * @param {string} hostname
+ * @param {Object} session
  */
 function AppFactory(
    fsModule,
    pathModule,
-   hostname
+   hostname,
+   session
 ){
    var instance = this;
+
+   if(!(session instanceof Object)){
+      throw new Error("session must be an Object.");
+   }
 
    /**
     * @param {string} sourceBase
@@ -90,6 +96,6 @@ function AppFactory(
     * @returns {TDD}
     */
    this.makeTDD=function(){
-      return new TDD();
+      return new TDD(session);
    };
 }

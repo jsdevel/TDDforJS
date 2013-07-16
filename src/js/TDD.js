@@ -1,7 +1,13 @@
 /*!
  * @constructor
+ * @param {Object} session An object to store session data that persists
+ * between unit and integration suites.
  */
-function TDD(){
+function TDD(session){
+   if(!(session instanceof Object)){
+      throw new Error("session must be an object.");
+   }
+   this.session=session;
    var asyncs;
    this.asyncs={
       /** @type {Array} */
