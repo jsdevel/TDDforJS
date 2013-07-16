@@ -40,7 +40,7 @@ function calling_setTimeout_should_return_code_and_add_callback(){
    var code=tdd.overrides.setTimeout(function(){
       isCalled=true;
    },5);
-   tdd.asyncs.flush();
+   tdd.async.flush();
    assert(code > 0, "no return code is given.");
    assert(isCalled, "wasn't called.");
 }
@@ -50,7 +50,7 @@ function calling_setInterval_should_return_code_and_add_callback(){
    var code=tdd.overrides.setInterval(function(){
       isCalled=true;
    },5);
-   tdd.asyncs.flush();
+   tdd.async.flush();
    assert(code > 0, "no return code is given.");
    assert(isCalled, "wasn't called.");
 }
@@ -61,7 +61,7 @@ function calling_clear_interval_with_returned_code_should_remove_callback(){
       isNotCalled=false;
    },5);
    tdd.overrides.clearInterval(code);
-   tdd.asyncs.flush();
+   tdd.async.flush();
    assert(code > 0, "no return code is given.");
    assert(isNotCalled, "was called.");
 }
@@ -72,7 +72,7 @@ function calling_clear_timeout_with_returned_code_should_remove_callback(){
       isNotCalled=false;
    },5);
    tdd.overrides.clearTimeout(code);
-   tdd.asyncs.flush();
+   tdd.async.flush();
    assert(code > 0, "no return code is given.");
    assert(isNotCalled, "was called.");
 }

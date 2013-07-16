@@ -8,8 +8,8 @@ function TDD(session){
       throw new Error("session must be an object.");
    }
    this.session=session;
-   var asyncs;
-   this.asyncs={
+   var async;
+   this.async={
       /** @type {Array} */
       intervals:[],
       /** @type {number} */
@@ -19,36 +19,36 @@ function TDD(session){
       /** @type {number} */
       timeoutCounter:0,
       empty:function(){
-         asyncs.intervals.length=0;
-         asyncs.timeouts.length=0;
+         async.intervals.length=0;
+         async.timeouts.length=0;
       },
       flush:function(){
-         asyncs.intervals.forEach(function(async){
-            async.callback();
+         async.intervals.forEach(function(asyncItem){
+            asyncItem.callback();
          });
-         asyncs.timeouts.forEach(function(async){
-            async.callback();
+         async.timeouts.forEach(function(asyncItem){
+            asyncItem.callback();
          });
-         asyncs.empty();
+         async.empty();
       }
    };
-   asyncs=this.asyncs;
+   async=this.async;
    this.overrides={
       setTimeout:function(fn, timeout){
-         var counter=++asyncs.timeoutCounter;
-         addAsync(counter, asyncs.timeouts, fn, timeout);
+         var counter=++async.timeoutCounter;
+         addAsync(counter, async.timeouts, fn, timeout);
          return counter;
       },
       setInterval:function(fn, interval){
-         var counter=++asyncs.intervalCounter;
-         addAsync(counter, asyncs.intervals, fn, interval);
+         var counter=++async.intervalCounter;
+         addAsync(counter, async.intervals, fn, interval);
          return counter;
       },
       clearTimeout:function(counter){
-         removeAsync(counter, asyncs.timeouts);
+         removeAsync(counter, async.timeouts);
       },
       clearInterval:function(counter){
-         removeAsync(counter, asyncs.intervals);
+         removeAsync(counter, async.intervals);
       }
    };
    function addAsync(counter, array, fn, time){

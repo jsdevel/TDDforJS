@@ -39,7 +39,10 @@ function __$$__eval_expects_tdd_to_be_an_object(){
    });
    assertNoGlobalVarsAcrossTests();
 }
-
+//Test
+function the_TDD_variable_should_be_available(){
+   evaluator.__$$__eval("TDD;", results, tdd);
+}
 //Test
 function the_Evaluator_should_not_be_overrideable_by_test_code(){
    evaluator.__$$__eval("TDDforJSEvaluator=void 0;", results, tdd);
