@@ -6,6 +6,27 @@
 function handleConfig(result, appFactory, templates){
    var logger = result.logger;
    var config = result.config;
+   var sourceFileNamePatterns=config.src.names instanceof Array?
+      config.src.names:
+      [".*\\.js"];
+   /** @type {Array} */
+   var testFileNamePatterns=
+      config.test.names instanceof Object?
+         config.test.names:
+         {
+            "units":[".*\\.js"],
+            "integrations":[".*\\.js"]
+         };
+   /** @type {Array} */
+   var unitFileNamePatterns=
+      testFileNamePatterns.units instanceof Array?
+         testFileNamePatterns.units:
+         [".*\\.js"];
+   /** @type {Array} */
+   var integrationFileNamePatterns=
+      testFileNamePatterns.integrations instanceof Array?
+         testFileNamePatterns.integrations:
+         [".*\\.js"];
    var src_dir;
    var test_dir;
    var js_dir;
@@ -15,8 +36,6 @@ function handleConfig(result, appFactory, templates){
    var sources;
    var units;
    var integrations;
-   var sourceFilePatterns = ['.*\\.js$'];
-   var testFilePatterns   = sourceFilePatterns;
    /** @type {SuiteFileResolver} */
    var unitTestSuiteFileResolver;
    /** @type {SuiteFileResolver} */
@@ -49,11 +68,11 @@ function handleConfig(result, appFactory, templates){
    importResolver=appFactory.makeImportResolver(src_dir, test_dir);
    evaluator = appFactory.makeTDDforJSEvaluator();
 
-   sources        = getFiles(js_dir,          sourceFilePatterns, 100)
+   sources        = getFiles(js_dir,          sourceFileNamePatterns, 100)
                      .map(getRelativePathFn(js_dir));
-   units          = getFiles(units_dir,        testFilePatterns,   100)
+   units          = getFiles(units_dir,        unitFileNamePatterns,   100)
                      .map(getRelativePathFn(units_dir));
-   integrations   = getFiles(integrations_dir, testFilePatterns,   100)
+   integrations   = getFiles(integrations_dir, integrationFileNamePatterns, 100)
                      .map(getRelativePathFn(integrations_dir));
 
    unitTestSuiteFileResolver=appFactory.makeSuiteFileResolver(units_dir);
