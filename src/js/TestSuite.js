@@ -28,6 +28,10 @@ function TestSuite(
    /** @type {RegExp} */
    var reg_testBeforeSuite=/^function\s+beforeSuite[^a-zA-Z0-9_$]+/m;
    /** @type {RegExp} */
+   var reg_testOnFailure=/^function\s+onFailure[^a-zA-Z0-9_$]+/m;
+   /** @type {RegExp} */
+   var reg_testOnSuccess=/^function\s+onSuccess[^a-zA-Z0-9_$]+/m;
+   /** @type {RegExp} */
    var reg_blockComments=/\/\*(?:(?!\*\/)[\s\S])*\*\//g;
    /** @type {RegExp} */
    var reg_preprocessedComment=/PREPROCESSED_COMMENT[0-9]+/g;
@@ -51,6 +55,10 @@ function TestSuite(
    var hasBefore=false;
    /** @type {boolean} */
    var hasBeforeSuite=false;
+   /** @type {boolean} */
+   var hasOnFailure=false;
+   /** @type {boolean} */
+   var hasOnSuccess=false;
    /** @type {string} */
    var testCases=[];
    /** @type {string} */
@@ -118,6 +126,23 @@ function TestSuite(
       return hasBeforeSuite;
    };
 
+   /**
+    * Inform the caller if the testSuite had a "onFailure" function defined.
+    * @returns {boolean}
+    */
+   this.hasOnFailure=function(){
+      analyzeTestSuite();
+      return hasOnFailure;
+   };
+
+   /**
+    * Inform the caller if the testSuite had a "onFailure" function defined.
+    * @returns {boolean}
+    */
+   this.hasOnSuccess=function(){
+      analyzeTestSuite();
+      return hasOnSuccess;
+   };
    /**
     * Inform the caller if the testSuite had test cases defined.
     * @returns {boolean}
@@ -217,6 +242,7 @@ function TestSuite(
                      hasBefore?"before();":"",
                      testCaseName+"();",
                      hasAfter?"after();":"",
+                     hasOnSuccess?"onSuccess("+testCase+");":"",
                   "}catch(e){",
                      "if(e instanceof Error){",
                         "if(e.constructor.name.toLowerCase().indexOf('assert') > -1){",
@@ -241,6 +267,13 @@ function TestSuite(
                            "type:'unknown'",
                         "};",
                      "}",
+                     hasOnFailure?[
+                        "try {",
+                           hasOnFailure?"onFailure(e);":"",
+                        "} catch (e){",
+                           "console.error('The call to onFailure failed because of: ', e);",
+                        "}"
+                     ].join('\n'):"",
                   "}",
                   testCase+".time=(Date.now()-"+testCase+".time)/1000;",
                   "delete "+testCase+";",
@@ -282,6 +315,8 @@ function TestSuite(
          hasAfterSuite=reg_testAfterSuite.test(source);
          hasBefore=reg_testBefore.test(source);
          hasBeforeSuite=reg_testBeforeSuite.test(source);
+         hasOnFailure=reg_testOnFailure.test(source);
+         hasOnSuccess=reg_testOnSuccess.test(source);
          source=source.replace(reg_test, function(match, name){
             var duplicate;
             if(name in duplicateTestCases){

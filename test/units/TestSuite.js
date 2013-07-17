@@ -145,6 +145,28 @@ function hasBeforeSuite_should_be_set_appropriately(){
    );
 }
 //Test
+function hasOnFailure_should_be_set_appropriately(){
+   assert(
+      !new TestSuite(prefix, className, hostname, id, sampleSuite).hasOnFailure(),
+      "hasOnFailure should be false by default"
+   );
+   assert(
+      new TestSuite(prefix, className, hostname, id, sampleSuite+"\nfunction onFailure(){}").hasOnFailure(),
+      "hasOnFailure should be true when onFailure is defined in suite."
+   );
+}
+//Test
+function hasOnSuccess_should_be_set_appropriately(){
+   assert(
+      !new TestSuite(prefix, className, hostname, id, sampleSuite).hasOnSuccess(),
+      "hasOnSuccess should be false by default"
+   );
+   assert(
+      new TestSuite(prefix, className, hostname, id, sampleSuite+"\nfunction onSuccess(){}").hasOnSuccess(),
+      "hasOnSuccess should be true when onSuccess is defined in suite."
+   );
+}
+//Test
 function no_tests_should_be_defined_by_default(){
    testSuite = new TestSuite(prefix, className, hostname, id, "asdf");
    assert(
@@ -189,6 +211,40 @@ function resulting_source_should_execute_test(){
    testSuite=new TestSuite(prefix, "Foo", hostname, id, sampleSuite);
    eval(testSuite.toString());
    assert.equal(_testSuiteResults.package, "", "package not set when package does not exist.");
+}
+//Test
+function when_onFailure_appears_it_should_be_called(){
+   var myError;
+   testSuite=new TestSuite(
+      prefix,
+      className,
+      hostname,
+      5,
+      "function onFailure(e){myError=e;}\n"+
+      sampleSuite+
+      "\n//Test\nfunction foo(){throw 5;}\n"
+   );
+   eval(testSuite.toString());
+   assert.equal(myError, 5, "onFailure didn't execute.");
+}
+//Test
+function when_onSuccess_appears_it_should_be_called(){
+   var successfulTestCase;
+   testSuite=new TestSuite(
+      prefix,
+      className,
+      hostname,
+      5,
+      "function onSuccess(testCase){successfulTestCase=testCase;}\n"+
+      sampleSuite+
+      "\n//Test\nfunction foo_some(){}\n"
+   );
+   eval(testSuite.toString());
+   assert.deepEqual(
+      successfulTestCase,
+      _testSuiteResults.testCases[_testSuiteResults.testCases.length-1],
+      "onSuccess didn't execute or wasn't given the right testCase."
+   );
 }
 //Test
 function testSuite_should_return_appropriate_values(){
