@@ -64,12 +64,12 @@ function ImportResolver(
       imports.forEach(function(path, index){
          var file;
          file = pathModule.resolve(testBase, path+".js");
-         if(fsModule.statSync(file).isFile()){
+         if(fsModule.existsSync(file) && fsModule.statSync(file).isFile()){
             imports[index]=fsModule.readFileSync(file, "UTF8");
             return;
          }
          file = pathModule.resolve(sourceBase, path+".js");
-         if(fsModule.statSync(file).isFile()){
+         if(fsModule.existsSync(file) && fsModule.statSync(file).isFile()){
             imports[index]=fsModule.readFileSync(file, "UTF8");
             return;
          }
