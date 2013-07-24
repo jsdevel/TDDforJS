@@ -2,8 +2,20 @@
  * @constructor
  * @param {Object} fsModule
  * @param {Object} pathModule
+ * @param {string} hostname
+ * @param {Object} session
  */
-function AppFactory(fsModule, pathModule){
+function AppFactory(
+   fsModule,
+   pathModule,
+   hostname,
+   session
+){
+   var instance = this;
+
+   if(!(session instanceof Object)){
+      throw new Error("session must be an Object.");
+   }
 
    /**
     * @param {string} sourceBase
@@ -20,46 +32,70 @@ function AppFactory(fsModule, pathModule){
    };
 
    /**
-    * @param {string} sourcePath
-    * @param {string} unitPath
-    * @return {TDDforJSEvaluator}
+    * @param {string} className
+    * @param {string} hostname
+    * @param {number} id
+    * @param {string} source
+    * @returns {TestSuite}
     */
-   this.makeUnitTestResolver=function(sourcePath, unitPath){
-      return new UnitTestResolver(
+   this.makeTestSuite=function(
+      className,
+      hostname,
+      id,
+      source
+   ){
+      return new TestSuite(
+         "__$$__",
+         className,
+         hostname,
+         id,
+         source
+      );
+   };
+
+   /**
+    * @param {Array.<string>} files
+    * @param {SuiteFileResolver} fileResolver
+    * @param {ImportResolver} importResolver
+    * @param {TDDforJSEvaluator} evaluator
+    * @param {function(string): string} extraSourceFn
+    * @returns {TestSuites}
+    */
+   this.makeTestSuites=function(
+      files,
+      fileResolver,
+      importResolver,
+      evaluator,
+      extraSourceFn
+   ){
+      return new TestSuites(
+            files,
+            instance,
+            hostname,
+            fileResolver,
+            importResolver,
+            pathModule,
+            evaluator,
+            extraSourceFn
+      );
+   };
+
+   /**
+    * @param {string} baseDir
+    * @returns {SuiteFileResolver}
+    */
+   this.makeSuiteFileResolver=function(baseDir){
+      return new SuiteFileResolver(
          fsModule,
          pathModule,
-         sourcePath,
-         unitPath
+         baseDir
       );
    };
 
    /**
-    * @param {Array} sources
-    * @param {Array} units
-    * @return {UnitTestReporter}
+    * @returns {TDD}
     */
-   this.makeUnitTestReporter=function(sources, units){
-      return new UnitTestReporter(sources, units);
-   };
-
-   /**
-    * @param {TDDforJSEvaluator} evaluator
-    * @param {UnitTestReporter} reporter
-    * @param {UnitTestResolver} unitTestResolver
-    * @param {ImportResolver} importResolver
-    * @returns {UnitTestRunner}
-    */
-   this.makeUnitTestRunner=function(
-      evaluator,
-      reporter,
-      unitTestResolver,
-      importResolver
-   ){
-      return new UnitTestRunner(
-         evaluator,
-         reporter,
-         unitTestResolver,
-         importResolver
-      );
+   this.makeTDD=function(){
+      return new TDD(session);
    };
 }

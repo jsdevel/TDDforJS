@@ -25,10 +25,58 @@ function TDDforJSEvaluator(){
    };
    /**
     * @param {string} code
-    * @param {Object} __$$__mappedResults
+    * @param {Object} __$$__testSuiteResults
     * @returns {unresolved}
     */
-   this.__$$__eval=function(code, __$$__mappedResults){
+   this.__$$__eval=function(code, __$$__testSuiteResults, TDD){
+      if(!code || typeof code !== 'string'){
+         throw new Error("code must be a non empty string.");
+      }
+      if(!(__$$__testSuiteResults instanceof Object)){
+         throw new Error("__$$__testSuiteResults must be an instanceof Object.");
+      }
+      if(!(TDD instanceof Object)){
+         throw new Error("TDD must be an instanceof Object.");
+      }
+
+      var setTimeout=TDD.overrides.setTimeout;
+      var setInterval=TDD.overrides.setInterval;
+      var clearTimeout=TDD.overrides.clearTimeout;
+      var clearInterval=TDD.overrides.clearInterval;
+
+      var console={
+         log:function(){
+            __$$__testSuiteResults.stdOut.push({
+               type:"log",
+               arguments:Array.prototype.slice.call(arguments)
+            });
+         },
+         info:function(){
+            __$$__testSuiteResults.stdOut.push({
+               type:"info",
+               arguments:Array.prototype.slice.call(arguments)
+            });
+         },
+         dir:function(){
+            __$$__testSuiteResults.stdOut.push({
+               type:"dir",
+               arguments:Array.prototype.slice.call(arguments)
+            });
+         },
+
+         error:function(){
+            __$$__testSuiteResults.stdErr.push({
+               type:"error",
+               arguments:Array.prototype.slice.call(arguments)
+            });
+         },
+         warn:function(){
+            __$$__testSuiteResults.stdErr.push({
+               type:"warn",
+               arguments:Array.prototype.slice.call(arguments)
+            });
+         }
+      };
       return eval(code);
    };
 

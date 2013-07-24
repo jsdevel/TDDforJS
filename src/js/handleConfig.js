@@ -6,6 +6,27 @@
 function handleConfig(result, appFactory, templates){
    var logger = result.logger;
    var config = result.config;
+   var sourceFileNamePatterns=config.src.names instanceof Array?
+      config.src.names:
+      [".*\\.js"];
+   /** @type {Array} */
+   var testFileNamePatterns=
+      config.test.names instanceof Object?
+         config.test.names:
+         {
+            "units":[".*\\.js"],
+            "integrations":[".*\\.js"]
+         };
+   /** @type {Array} */
+   var unitFileNamePatterns=
+      testFileNamePatterns.units instanceof Array?
+         testFileNamePatterns.units:
+         [".*\\.js"];
+   /** @type {Array} */
+   var integrationFileNamePatterns=
+      testFileNamePatterns.integrations instanceof Array?
+         testFileNamePatterns.integrations:
+         [".*\\.js"];
    var src_dir;
    var test_dir;
    var js_dir;
@@ -15,26 +36,28 @@ function handleConfig(result, appFactory, templates){
    var sources;
    var units;
    var integrations;
-   var sourceFilePatterns = ['.*\\.js$'];
-   var testFilePatterns   = sourceFilePatterns;
-   /** @type {UnitTestReporter} */
-   var unitReporter;
-   /** @type {UnitTestRunner} */
-   var unitRunner;
-   /** @type {UnitTestResolver} */
-   var unitTestResolver;
+   /** @type {SuiteFileResolver} */
+   var unitTestSuiteFileResolver;
+   /** @type {SuiteFileResolver} */
+   var integrationTestSuiteFileResolver;
+   /** @type {TestSuites} */
+   var unitTestSuites;
+   /** @type {TestSuites} */
+   var integrationTestSuites;
    /** @type {ImportResolver} */
    var importResolver;
    /** @type {TDDforJSEvaluator} */
    var evaluator;
    /** @type {string} */
    var report;
-   /** @type {string} */
-   var testSuiteName;
    /** @type {boolean} */
    var shouldOutputJunit;
    /** @type {boolean} */
    var shouldOutputTestNg;
+   /** @type {Object} */
+   var unitTestResults;
+   /** @type {Object} */
+   var integrationTestResults;
 
    src_dir=getMainDir('src');
    test_dir=getMainDir('test');
@@ -42,30 +65,46 @@ function handleConfig(result, appFactory, templates){
    units_dir=getSubDir(config.test, test_dir, 'units', 'test', false);
    integrations_dir=getSubDir(config.test, test_dir, 'integrations', 'test', true);
 
-   unitTestResolver=appFactory.makeUnitTestResolver(js_dir, units_dir);
    importResolver=appFactory.makeImportResolver(src_dir, test_dir);
    evaluator = appFactory.makeTDDforJSEvaluator();
 
-   sources        = getFiles(js_dir,          sourceFilePatterns, 100)
+   sources        = getFiles(js_dir,          sourceFileNamePatterns, 100)
                      .map(getRelativePathFn(js_dir));
-   units          = getFiles(units_dir,        testFilePatterns,   100)
+   units          = getFiles(units_dir,        unitFileNamePatterns,   100)
                      .map(getRelativePathFn(units_dir));
-   integrations   = getFiles(integrations_dir, testFilePatterns,   100)
+   integrations   = getFiles(integrations_dir, integrationFileNamePatterns, 100)
                      .map(getRelativePathFn(integrations_dir));
 
-   unitReporter = appFactory.makeUnitTestReporter(sources, units);
-   unitRunner = appFactory.makeUnitTestRunner(
+   unitTestSuiteFileResolver=appFactory.makeSuiteFileResolver(units_dir);
+   integrationTestSuiteFileResolver=appFactory.makeSuiteFileResolver(integrations_dir);
+   unitTestSuites=appFactory.makeTestSuites(
+      units,
+      unitTestSuiteFileResolver,
+      importResolver,
       evaluator,
-      unitReporter,
-      unitTestResolver,
-      importResolver
+      function(unit){
+         var unitPath=path.resolve(js_dir, unit);
+         return fs.readFileSync(unitPath, "UTF8");
+      }
    );
-
-   unitRunner.run();
+   integrationTestSuites=appFactory.makeTestSuites(
+      integrations,
+      integrationTestSuiteFileResolver,
+      importResolver,
+      evaluator,
+      function(unit){
+         //do nothing for integration tests.  They're not backed by a unit.
+      }
+   );
+   unitTestResults=unitTestSuites.getResults();
+   integrationTestResults=integrationTestSuites.getResults();
 
    if(config.reporting){
       if(config.reporting.mode === 'cli'){
-         report = templates.reporting.cli(unitReporter);
+         report = templates.reporting.cli({
+            units:units.length&&unitTestResults,
+            integrations:integrations.length&&integrationTestResults
+         });
          console.log(report);
       }
       if(config.reporting.output && config.reporting.base){
@@ -87,19 +126,26 @@ function handleConfig(result, appFactory, templates){
             fs.mkdir(reporting_dir);
          }
          if(shouldOutputJunit){
-            var results = unitReporter.getResults();
-            for(testSuiteName in results){
+            if(units.length){
                fs.writeFileSync(
                     path.resolve(
                         reporting_dir,
-                        testSuiteName+".xml"
+                        "Test-Units-TDDforJS.xml"
                      ),
-                     templates.reporting.junit(
-                        results[testSuiteName],
-                        {name:testSuiteName}
-                     ),
+                     templates.reporting.junit(unitTestResults),
                      "UTF8"
                );
+            }
+            if(integrations.length){
+               fs.writeFileSync(
+                    path.resolve(
+                        reporting_dir,
+                        "Test-Integrations-TDDforJS.xml"
+                     ),
+                     templates.reporting.junit(integrationTestResults),
+                     "UTF8"
+               );
+
             }
          }
       }
@@ -108,9 +154,7 @@ function handleConfig(result, appFactory, templates){
    function getRelativePathFn(base){
       return function(v){
          return v.
-            substring(base.length+1).
-            replace(/\.js$/, '').
-            replace(/\//g, '.');
+            substring(base.length+1);
       };
    }
    function getMainDir(ns){

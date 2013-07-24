@@ -11,6 +11,7 @@
  * Date:     Sat Jan 26 12:47:27 2013 -0200
  */
 
+if(typeof JsMockito === 'undefined'){
 var JsHamcrest = {
   /**
    * Library version.
@@ -2203,5 +2204,5 @@ JsMockito.verifier('NoMoreInteractions', {
     target[exported] = JsMockito.Verifiers[exported];
   });
 })(this);
-
+}
 assert=require('assert');
