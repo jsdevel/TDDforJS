@@ -11,7 +11,7 @@ var result;
 function before(){
    createFsMock();
    mockPathModule={
-      resolve:function(base, last){return base+"/"+last}
+      resolve:function(base, last){return base+"/"+last;}
    };
    when(mockFsModule).statSync(string()).thenReturn({
       isFile:function(){return true;}
