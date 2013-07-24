@@ -100,6 +100,7 @@ function TestSuites(
             };
             var errors=[];
             var extraSource;
+            var sourceToTest;
 
             parts.forEach(function(part){
                className+=cleanPackagePart(part)+".";
@@ -121,22 +122,33 @@ function TestSuites(
             } catch(e){
                errors.push(e);
             }
-            if(evaluator.__$$__checkScriptForError(imports)){
-               errors.push(evaluator.__$$__getEarlyErrorFromScript(imports));
-            }
 
-            if(evaluator.__$$__checkScriptForError(source)){
-               errors.push(evaluator.__$$__getEarlyErrorFromScript(source));
+            sourceToTest=[
+               "!function(){",
+               imports,
+               "!function(){",
+               extraSource,
+               "!function(){",
+               source,
+               "}();",
+               "}();",
+               "}();"
+            ].join('\n');
+
+            if(evaluator.__$$__checkScriptForError(sourceToTest)){
+               errors.push(evaluator.__$$__getEarlyErrorFromScript(sourceToTest));
             }
 
             if(!errors.length){
                evaluator.__$$__eval(
                   [
                      "!function(){",
+                     imports,
+                     "!function(){",
                      extraSource,
                      "!function(){",
-                     imports,
                      suite.toString(),
+                     "}();",
                      "}();",
                      "}();"
                   ].join('\n'),

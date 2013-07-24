@@ -133,16 +133,15 @@ function before(){
    evaluatorCalls=[];
    evaluator={
       __$$__checkScriptForError:function(script){
-         switch(script){
-         case "fooSource":
-            return isFooSourceBad;
-         case "fooImports":
-            return isFooImportBad;
-         case "booSource":
-            return isBooSourceBad;
-         case "booImports":
-            return isBooImportBad;
+         if(
+            script.indexOf("fooSource") > -1 && isFooSourceBad ||
+            script.indexOf("fooImports") > -1 && isFooImportBad ||
+            script.indexOf("booSource") > -1 && isBooSourceBad ||
+            script.indexOf("booImports") > -1 && isBooImportBad
+         ){
+            return true;
          }
+         return false;
       },
       __$$__getEarlyErrorFromScript:function(script){
          switch(script){
@@ -155,6 +154,15 @@ function before(){
          case "booImports":
             return badBooImportError;
          }
+         if(
+            script.indexOf("fooSource") > -1 && isFooSourceBad ||
+            script.indexOf("fooImports") > -1 && isFooImportBad ||
+            script.indexOf("booSource") > -1 && isBooSourceBad ||
+            script.indexOf("booImports") > -1 && isBooImportBad
+         ){
+            return true;
+         }
+         return false;
 
       },
       __$$__eval:function(source, results){
@@ -242,11 +250,11 @@ function evaluator_should_be_called_appropriately(){
       evaluatorCalls,
       [
          [
-            '!function(){\n\n!function(){\nfooImports\nfooSource\n}();\n}();',
+            '!function(){\nfooImports\n!function(){\n\n!function(){\nfooSource\n}();\n}();\n}();',
             {stdErr:[],stdOut:[],failures:0,errors:0,tests:fooTests}
          ],
          [
-            '!function(){\n\n!function(){\nbooImports\nbooSource\n}();\n}();',
+            '!function(){\nbooImports\n!function(){\n\n!function(){\nbooSource\n}();\n}();\n}();',
             {stdErr:[],stdOut:[],failures:0,errors:0,tests:booTests}
          ]
       ],
@@ -265,11 +273,11 @@ function evaluator_should_be_called_appropriately_when_extraCallBackFn_returns_s
       evaluatorCalls,
       [
          [
-            '!function(){\nfooExternal source.\n!function(){\nfooImports\nfooSource\n}();\n}();',
+            '!function(){\nfooImports\n!function(){\nfooExternal source.\n!function(){\nfooSource\n}();\n}();\n}();',
             {stdErr:[],stdOut:[],failures:0,errors:0,tests:fooTests}
          ],
          [
-            '!function(){\n\n!function(){\nbooImports\nbooSource\n}();\n}();',
+            '!function(){\nbooImports\n!function(){\n\n!function(){\nbooSource\n}();\n}();\n}();',
             {stdErr:[],stdOut:[],failures:0,errors:0,tests:booTests}
          ]
       ],
