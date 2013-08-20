@@ -33,24 +33,31 @@ The following is a default config file:
          "cli",
          "junit",
          "testng"
-      ],
+      ],  
       "base":"../reports",
       "output":{
          "types":{
             "junit":true,
             "testng":false
          }
-      }
-   },
+      }   
+   },  
    "src":{
       "base":"../src",
-      "js":"./js"
-   },
+      "js":"./js",
+      "names":[
+         ".*\\.js"
+      ]   
+   },  
    "test":{
       "base":"../test",
       "integrations":"./integrations",
-      "units":"./units"
-   }
+      "units":"./units",
+      "names":{
+         "units":[".*\\.js"],
+         "integrations":[".*\\.js"]
+      }   
+   }   
 }
 `````
 Convention
