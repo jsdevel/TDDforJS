@@ -1,3 +1,7 @@
+//import lib/testTDDInImport
+
+//The import above is to insure that TDD is available during the importing phase.
+
 var assert = require('assert');
 var testSuite;
 var results;
