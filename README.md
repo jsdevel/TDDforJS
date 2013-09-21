@@ -25,7 +25,7 @@ TDD uses config-tools to look for a `config/tddforjs.json` file within your
 project root.
 
 The following is a default config file:
-`````
+```javascript
 {
    "reporting":{
       "mode":"cli",
@@ -33,32 +33,41 @@ The following is a default config file:
          "cli",
          "junit",
          "testng"
-      ],
+      ],  
       "base":"../reports",
       "output":{
          "types":{
             "junit":true,
             "testng":false
          }
-      }
-   },
+      }   
+   },  
    "src":{
       "base":"../src",
-      "js":"./js"
-   },
+      "js":"./js",
+      "names":[
+         ".*\\.js"
+      ]   
+   },  
    "test":{
       "base":"../test",
       "integrations":"./integrations",
-      "units":"./units"
-   }
+      "units":"./units",
+      "names":{
+         "units":[".*\\.js"],
+         "integrations":[".*\\.js"]
+      }   
+   }   
 }
-`````
+```
+
 Convention
 =========
 By default, TDD assumes that each file under `src/js` will have an accompanying
 unit test under the `test/units` directory.
 A default project structure looks like this:
-``````
+
+```
 $ProjectRoot/
             |
             |
@@ -77,7 +86,8 @@ $ProjectRoot/
                      |
                      |
                      |____integrations/
-```````
+```
+
 TDD will run tests in `units/MyFile.js` against `src/MyFile.js`.
 All suites found in `integrations/` will be run as well.
 
@@ -91,7 +101,7 @@ Here is a sample test suite.  The inspiration comes from jUnit 4.x, so the follo
 * Errors not an instanceof Error show as a failure.
 * Errors that are an instance of Error show as an error.
 
-``````
+```javascript
 var assert = require('assert');
 var factory;
 function before(){
@@ -135,11 +145,11 @@ function SuiteFileResolver_should_be_creatable(){
       assert.fail("SuiteFileResolver wasn't created.");
    }
 }
-``````
+```
 
 And here's the source file:
 
-``````
+```javascript
 /**
  * @constructor
  * @param {Object} fsModule
@@ -229,22 +239,25 @@ function AppFactory(
    };
 }
 
-``````
+```
 
 Importing
 ========
 TDD allows your test suites to import any javascript file for the duration of
 your test.  The following paths are searched for a match in order:
+
 `test/`
 `src/`
+
 To define imports, you specify comments at the top of your suite like this:
-````
+
+```javascript
 //import foo
 //import lib/jsmockito
 function before(){
 }
 //continue testing...
-``````
+```
 
 Errors in Source
 ========
@@ -254,16 +267,16 @@ when they can't be run due to an uncaught error in your source, suite, or any
 import.
 
 Let's say we have the following source:
-````````
+```javascript
 //import foo
 throw 5;
-````````
+```
 And we're testing it with a unit test:
-````````
+```javascript
 //Test
 function foo_should_foo(){
 }
-````````
+```
 We would report 1 test and 1 failure for our unit test, despite the fact that
 there's clearly an error in our source file when the unit test is run.
 
@@ -280,7 +293,7 @@ TDD aims to provide support for three types of reports:
 The two latter types would enable integration with a CI server like Hudson or Jenkins.
 
 Here's what a sample report looks like from the CLI:
-``````
+```
 ========================================
 UNIT TEST REPORT
 ========================================
@@ -296,9 +309,10 @@ Suites      : 1
 Tests       : 0
 Failures    : 0
 Errors      : 0
-``````
+```
+
 Here's what a junit report looks like for hudson and jenkins:
-``````
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
    <testsuite name="AppFactory"
@@ -344,11 +358,11 @@ Here's what a junit report looks like for hudson and jenkins:
       </system-err>
    </testsuite>
 </testsuites>
-``````
+```
 TDD only reports errors and failures, so if we were to do something in our
 sample suite that would fail a test, the output would look like this for the
 CLI:
-``````
+```
 ========================================
 UNIT TEST REPORT
 ========================================
@@ -372,9 +386,9 @@ Suites      : 1
 Tests       : 0
 Failures    : 0
 Errors      : 0
-``````
+```
 And in the JUnit report:
-``````
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
    <testsuite name="AppFactory"
@@ -424,7 +438,7 @@ And in the JUnit report:
       </system-err>
    </testsuite>
 </testsuites>
-``````
+```
 
 Console Logging
 ==========
@@ -433,7 +447,7 @@ difficult to decipher it's output without any context.
 
 TDD overrides console and places the messages in the reports.
 Let's add a `console.log` statement to a test case:
-``````
+```javascript
 //Test
 function ImportResolver_should_be_creatable(){
    ImportResolver = function(){};
@@ -442,9 +456,9 @@ function ImportResolver_should_be_creatable(){
    }
    console.log("calling console.log", "with some arguments", 5, 6, 7)
 }
-``````
+```
 Here's what the CLI report shows:
-``````
+```
 ========================================
 UNIT TEST REPORT
 ========================================
@@ -468,9 +482,9 @@ Suites      : 1
 Tests       : 0
 Failures    : 0
 Errors      : 0
-``````
+```
 Here's what the JUnit report shows:
-```````
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
    <testsuite name="AppFactory"
@@ -517,4 +531,4 @@ console.log(calling console.log , with some arguments , 5 , 6 , 7);
       </system-err>
    </testsuite>
 </testsuites>
-``````
+```
