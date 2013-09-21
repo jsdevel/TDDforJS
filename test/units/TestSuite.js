@@ -276,3 +276,12 @@ function testSuite_should_return_appropriate_values(){
    );
 
 }
+//Test
+function adding_set_timeout_should_work(){
+   setTimeout(function(){});
+   assert(TDD.async.timeouts.length > 0);
+}
+//Test
+function no_callback_should_exist_between_tests(){
+   assert(TDD.async.timeouts.length === 0);
+}
