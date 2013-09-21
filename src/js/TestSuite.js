@@ -239,6 +239,7 @@ function TestSuite(
                "!function(){",
                   testCase+".time=Date.now();",
                   "try{",
+                     "if(TDD.async && TDD.async.empty)TDD.async.empty();",
                      hasBefore?"before();":"",
                      testCaseName+"();",
                      hasAfter?"after();":"",
