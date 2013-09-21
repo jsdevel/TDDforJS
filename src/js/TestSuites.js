@@ -101,6 +101,7 @@ function TestSuites(
             var errors=[];
             var extraSource;
             var sourceToTest;
+            var TDD=appFactory.makeTDD();
 
             parts.forEach(function(part){
                className+=cleanPackagePart(part)+".";
@@ -135,8 +136,10 @@ function TestSuites(
                "}();"
             ].join('\n');
 
-            if(evaluator.__$$__checkScriptForError(sourceToTest)){
-               errors.push(evaluator.__$$__getEarlyErrorFromScript(sourceToTest));
+            if(evaluator.__$$__checkScriptForError(sourceToTest, TDD)){
+               errors.push(
+                  evaluator.__$$__getEarlyErrorFromScript(sourceToTest, TDD)
+               );
             }
 
             if(!errors.length){
@@ -153,7 +156,7 @@ function TestSuites(
                      "}();"
                   ].join('\n'),
                   suiteResults,
-                  appFactory.makeTDD()
+                  TDD
                );
             } else {
                suiteResults.testCases=[];

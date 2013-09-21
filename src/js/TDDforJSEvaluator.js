@@ -85,7 +85,7 @@ function TDDforJSEvaluator(){
     * @param {string} code
     * @returns {Boolean}
     */
-   this.__$$__checkScriptForError=function(code){
+   this.__$$__checkScriptForError=function(code, TDD){
       try {
          eval(code);
          return false;
@@ -99,7 +99,7 @@ function TDDforJSEvaluator(){
     * @param {string} code
     * @returns {Error}
     */
-   this.__$$__getEarlyErrorFromScript=function(code){
+   this.__$$__getEarlyErrorFromScript=function(code, TDD){
       try {
          eval(code);
          if_you_see_this_error_it_means_TDD_is_flawed_please_report_it;
