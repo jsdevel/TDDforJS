@@ -7,6 +7,13 @@ var session={};
 configTools.getConfig(
    'tddforjs',
    function(config){
+      process.chdir(
+         path.resolve(
+            config.dir,
+            config.project && config.project.base || process.cwd()
+         )
+      );
+
       handleConfig(
          config,
          new AppFactory(
