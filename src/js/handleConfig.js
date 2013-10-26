@@ -68,11 +68,11 @@ function handleConfig(result, appFactory, templates){
    importResolver=appFactory.makeImportResolver(src_dir, test_dir);
    evaluator = appFactory.makeTDDforJSEvaluator();
 
-   sources        = getFiles(js_dir,          sourceFileNamePatterns, 100)
+   sources        = getFiles(true, js_dir,          sourceFileNamePatterns, 100)
                      .map(getRelativePathFn(js_dir));
-   units          = getFiles(units_dir,        unitFileNamePatterns,   100)
+   units          = getFiles(true, units_dir,        unitFileNamePatterns,   100)
                      .map(getRelativePathFn(units_dir));
-   integrations   = getFiles(integrations_dir, integrationFileNamePatterns, 100)
+   integrations   = getFiles(true, integrations_dir, integrationFileNamePatterns, 100)
                      .map(getRelativePathFn(integrations_dir));
 
    unitTestSuiteFileResolver=appFactory.makeSuiteFileResolver(units_dir);
@@ -153,8 +153,8 @@ function handleConfig(result, appFactory, templates){
 
    function getRelativePathFn(base){
       return function(v){
-         return v.
-            substring(base.length+1);
+            return v.
+               substring(base.length+1);
       };
    }
    function getMainDir(ns){

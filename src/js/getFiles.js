@@ -1,5 +1,6 @@
 /**
  *
+ * @param {boolean} ignoreFilesPrefixedWithDotOrUnderscore
  * @param {string} base
  * @param {Array.<string>} patternStrings
  * @param {number} maxRecursion
@@ -7,7 +8,14 @@
  * @param {Array.<RegExp>=} patterns <b>Note: Internal only.</b>
  * @returns {Array.<string>}
  */
-function getFiles(base, patternStrings, maxRecursion, timesCalled, patterns){
+function getFiles(
+   ignoreFilesPrefixedWithDotOrUnderscore,
+   base,
+   patternStrings,
+   maxRecursion,
+   timesCalled,
+   patterns
+){
    /** @type {Array}*/
    var called = (++timesCalled || 0);
    /** @type {Array}*/
@@ -34,6 +42,7 @@ function getFiles(base, patternStrings, maxRecursion, timesCalled, patterns){
       var i;
       if(stats.isDirectory()){
          moreFiles=getFiles(
+            ignoreFilesPrefixedWithDotOrUnderscore,
             file,
             patternStrings,
             maxRecursion,
@@ -54,6 +63,19 @@ function getFiles(base, patternStrings, maxRecursion, timesCalled, patterns){
          }
       }
    });
+
+   if(ignoreFilesPrefixedWithDotOrUnderscore){
+      !function(){
+         var i=filesToReturn.length-1;
+         var item;
+         for(;i>-1;i--){
+            item = filesToReturn[i];
+            if(/^[._]/.test(path.basename(item))){
+               filesToReturn.splice(i, 1);
+            }
+         }
+      }();
+   }
 
    return filesToReturn;
 }
