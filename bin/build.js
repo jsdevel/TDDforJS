@@ -29,7 +29,7 @@ if(!fs.existsSync(DIRS.BUILD)){
 }
 
 outputFile=[
-   "#!/bin/env node",
+   "#!/usr/bin/env node",
    "!function(){",
    getContentsOf("TDDforJSEvaluator"),
    "!function(){",
